@@ -1,4 +1,4 @@
-# Projet de développement Web : Comparateur de véhicules
+# Projet de développement Web : Comparateur de véhicules VsCar
 
 ## Description du projet
 
