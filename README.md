@@ -57,21 +57,9 @@ La gestion des administrateurs est également un aspect important de ce projet. 
 - Lorsqu'un administrateur se connecte, le site vérifie son type et lui accorde les privilèges appropriés.
 - Les administrateurs peuvent également avoir la possibilité de gérer les autres utilisateurs, par exemple en modifiant leurs privilèges ou en supprimant leurs comptes.
 
-Ces fonctionnalités d'authentification et de gestion des administrateurs contribueront à faire de votre site un environnement sûr et bien géré. Bon courage avec votre projet !
-
-## À venir
-
-- Implémentation des fonctionnalités restantes.
-- Tests et débogage.
-- Déploiement du site.
-
 ## Comment contribuer
 
 Si vous souhaitez contribuer à ce projet, veuillez nous contacter. Toutes les contributions sont les bienvenues, qu'il s'agisse de corrections de bugs, d'améliorations de fonctionnalités ou de nouvelles idées.
-
-D'accord, dans ce cas, vous pouvez utiliser la licence Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). Cette licence permet à d'autres de distribuer, remixer, adapter et construire sur votre travail de manière non commerciale, et bien qu'ils doivent vous créditer et ne peuvent pas utiliser le travail à des fins commerciales, ils n'ont pas à obtenir de licence pour les nouvelles créations basées sur le vôtre.
-
-Voici comment vous pourriez le formuler dans votre fichier README :
 
 ## Licence
 

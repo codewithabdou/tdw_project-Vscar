@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <?php
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/tdw_project-Vscar/app/view/Admin.php');
+    ?>
     Welcome to VsCar
 </body>
 
