@@ -13,7 +13,6 @@ class DataBaseModel
         try {
 
             $connection = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->dbName . ";charset=utf8;port=" . $this->port, $this->username, $this->password);
-            echo "halal";
             return $connection;
         } catch (PDOException $e) {
             echo "Connection failed: " . $e->getMessage();

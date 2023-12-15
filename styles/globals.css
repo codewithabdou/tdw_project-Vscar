@@ -1,0 +1,25 @@
+.lienCat {
+  border: 1px solid black;
+  border-radius: 1rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
+  position: relative;
+  padding: 4rem;
+}
+
+.imageCat {
+  position: absolute;
+  top: 0;
+  object-position: center;
+  object-fit: cover;
+}
+
+.listCat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
