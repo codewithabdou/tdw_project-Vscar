@@ -13,7 +13,8 @@ class UserController
         $userModel = new UserModel();
         try {
             $user = $userModel->login($username, $password);
-            $_SESSION['username'] = $user["Username"];
+            setcookie('loggedIn', 'true', time() + (86400 * 30), "/");
+            setcookie('userId', $user["ID_Utilisateur"], time() + (86400 * 30), "/");
             if ($user["Type"] === "Admin")
                 header("Location: /vscar/admin/dashboard");
             else
@@ -23,6 +24,15 @@ class UserController
             $_SESSION['login_error'] = $th->getMessage();
             header("Location: /vscar/login");
         }
+    }
+
+    public function logout()
+    {
+        unset($_COOKIE['loggedIn']);
+        unset($_COOKIE['userId']);
+        setcookie('loggedIn', null, -1, '/');
+        setcookie('userId', null, -1, '/');
+        header("Location: /vscar");
     }
 
     public function activateUser($userID)
@@ -63,16 +73,22 @@ class UserController
         return $userModel->getUserByID($id);
     }
 
-    public function updateUser($userId, $firstname, $lastname, $gender, $birthday)
+    public function updateUser($userId, $firstname, $lastname, $gender, $birthday, $from)
     {
         $userModel = new UserModel();
         try {
             $userModel->updateUser($userId, $firstname, $lastname, $gender, $birthday);
-            header("Location: /vscar/admin/users");
+            if ($from == "user")
+                header("Location: /vscar/userProfile?userId=$userId");
+            else
+                header("Location: /vscar/admin/users");
             exit;
         } catch (\Throwable $th) {
             $_SESSION['updateUser_error'] = $th->getMessage();
-            header("Location: /vscar/admin/users?userId=$userId");
+            if ($from == "user")
+                header("Location: /vscar/userProfile?userId=$userId");
+            else
+                header("Location: /vscar/admin/users?userId=$userId");
         }
     }
 

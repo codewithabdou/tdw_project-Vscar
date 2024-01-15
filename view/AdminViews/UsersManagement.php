@@ -33,8 +33,6 @@ class UsersManagement
         <div class="container mt-5">
             <h2>Users Management</h2>
 
-
-
             <div class="form-group">
                 <input type="text" class="form-control" id="searchUserInput" placeholder="Search...">
             </div>
@@ -188,6 +186,7 @@ class UsersManagement
                     unset($_SESSION['updateUser_error']);
                 }
                 ?>
+                <input hidden value="admin" name="from">
                 <button class="btn btn-primary" type="submit">Update Profile</button>
             </form>
         </div>

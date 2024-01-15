@@ -17,6 +17,18 @@ class VehiculeModel
         $dbController->disconnect($conn);
         return $result;
     }
+
+    public function getVehiculesByBrandId($brandId)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Marque = :brandId");
+        $stmt->bindParam(':brandId', $brandId);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $dbController->disconnect($conn);
+        return $result;
+    }
     public function updateVehicule($vehiculeID, $prix, $type_carburant, $puissance, $acceleration, $conso_carburant, $longueur, $largeur, $hauteur, $nb_places, $volume_coffre, $moteur, $Nom)
     {
         if (empty($prix) || empty($vehiculeID) || empty($type_carburant) || empty($puissance) || empty($acceleration) || empty($conso_carburant) || empty($longueur) || empty($largeur) || empty($hauteur) || empty($nb_places) || empty($volume_coffre) || empty($moteur) || empty($Nom)) {
@@ -72,6 +84,21 @@ class VehiculeModel
         // $this->updateVehiculePhoto($photo, $vehiculeID);
         $dbController->disconnect($conn);
         return true;
+    }
+
+    public function getOneVehiculeIDByBrandAndModelAndVersionAndYear($brand, $model, $version, $year)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Marque = :brand AND Modèle = :model AND Version = :version AND Année = :year LIMIT 1");
+        $stmt->bindParam(':brand', $brand);
+        $stmt->bindParam(':model', $model);
+        $stmt->bindParam(':version', $version);
+        $stmt->bindParam(':year', $year);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        $dbController->disconnect($conn);
+        return $result['ID_Véhicule'];
     }
 
 
@@ -222,6 +249,67 @@ class VehiculeModel
         $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Marque = :marqueID AND Modèle = :modele");
         $stmt->bindParam(':marqueID', $marqueID);
         $stmt->bindParam(':modele', $modele);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $dbController->disconnect($conn);
+        return $result;
+    }
+
+    public function likeVehiculeByUser($userId, $vehiculeId)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        try {
+            $stmt = $conn->prepare("INSERT INTO `véhicules_aimer`(`ID_Utilisateur`, `ID_Véhicule`) VALUES (:userId,:vehiculeId)");
+            $stmt->bindParam(':userId', $userId);
+            $stmt->bindParam(':vehiculeId', $vehiculeId);
+            $stmt->execute();
+            $dbController->disconnect($conn);
+            return true;
+        } catch (\Throwable $th) {
+            $dbController->disconnect($conn);
+            return false;
+        }
+    }
+
+    public function unlikeVehiculeByUser($userId, $vehiculeId)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        try {
+            $stmt = $conn->prepare("DELETE FROM `véhicules_aimer` WHERE ID_Utilisateur = :userId AND ID_Véhicule = :vehiculeId");
+            $stmt->bindParam(':userId', $userId);
+            $stmt->bindParam(':vehiculeId', $vehiculeId);
+            $stmt->execute();
+            $dbController->disconnect($conn);
+            return true;
+        } catch (\Throwable $th) {
+            $dbController->disconnect($conn);
+            return false;
+        }
+    }
+
+    public function getVehiculesLikedByUser($userId)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        $stmt = $conn->prepare("SELECT véhicules.* FROM `véhicules_aimer` INNER JOIN véhicules ON véhicules_aimer.ID_Véhicule = véhicules.ID_Véhicule WHERE véhicules_aimer.ID_Utilisateur = :userId");
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $dbController->disconnect($conn);
+        return $result;
+    }
+
+    
+
+    public function IsVehiculeLikedByUser($userId, $vehiculeId)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        $stmt = $conn->prepare("SELECT * FROM `véhicules_aimer` WHERE ID_Utilisateur = :userId AND ID_Véhicule = :vehiculeId");
+        $stmt->bindParam(':userId', $userId);
+        $stmt->bindParam(':vehiculeId', $vehiculeId);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $dbController->disconnect($conn);

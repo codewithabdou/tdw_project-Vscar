@@ -15,17 +15,8 @@ class AdminHomePage
 
 
 
-    public function displayAdminNews()
-    {
-        $this->displayAdminSideBar();
-        $this->displayAdminNewsContent();
-    }
 
-    public function displayAdminReviews()
-    {
-        $this->displayAdminSideBar();
-        $this->displayAdminReviewsContent();
-    }
+
 
     public function displayAdminSettings()
     {
@@ -47,15 +38,9 @@ class AdminHomePage
 
 
 
-    public function displayAdminReviewsContent()
-    {
 
-    }
 
-    public function displayAdminNewsContent()
-    {
 
-    }
 
     public function SignOut()
     {
@@ -72,7 +57,7 @@ class AdminHomePage
         ?>
         <header class="header" id="header">
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-            <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+            <div class=""> <img style="height: 20px;" src="/vscar/public/images/logos/logo-black.png" alt=""> </div>
         </header>
         <div class="l-navbar" id="nav-bar">
             <nav class="nav">
@@ -115,7 +100,7 @@ class AdminHomePage
     public function displayAdminDashboardContent()
     {
         ?>
-        <div class=" flex-centered height-100">
+        <div class=" flex-centered mt-12">
             <div class="d-flex  justify-content-center align-items-center flex-wrap g-3 ">
                 <a href="/vscar/admin/vehicules" class="card custom-card">
                     <div class="card-body ">
@@ -125,25 +110,21 @@ class AdminHomePage
                 <a href="/vscar/admin/users" class="card  custom-card">
                     <div class="card-body">
                         <h5 class="card-title">Users </h5>
-                        <!-- Add other card content here if needed -->
                     </div>
                 </a>
                 <a href="/vscar/admin/news" class="card  custom-card">
                     <div class="card-body">
                         <h5 class="card-title">News </h5>
-                        <!-- Add other card content here if needed -->
                     </div>
                 </a>
                 <a href="/vscar/admin/reviews" class="card  custom-card">
                     <div class="card-body">
                         <h5 class="card-title">Reviews</h5>
-                        <!-- Add other card content here if needed -->
                     </div>
                 </a>
                 <a href="/vscar/admin/settings" class="card  custom-card">
                     <div class="card-body">
                         <h5 class="card-title">Settings</h5>
-                        <!-- Add other card content here if needed -->
                     </div>
                 </a>
             </div>

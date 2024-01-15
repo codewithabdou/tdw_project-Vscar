@@ -6,6 +6,7 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/vscar/controller/User.php");
 
 
 $userId = $_POST["userId"] ?? null;
+$from = $_POST["from"] ?? null;
 $firstname = $_POST["Nom"] ?? null;
 $lastname = $_POST["Prénom"] ?? null;
 $gender = $_POST["Sexe"] ?? null;
@@ -19,7 +20,7 @@ $_SESSION['updateUser_form_data'] = $_POST;
 
 $userController = new UserController();
 
-$userController->updateUser($userId, $firstname, $lastname, $gender, $birthday);
+$userController->updateUser($userId, $firstname, $lastname, $gender, $birthday,$from);
 
 
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // Marque Controller class
 
@@ -30,12 +30,30 @@ class MarqueController
         return $marqueModel->getMarqueByName($marqueName);
     }
 
-    
+
 
     public function addMarque($marqueName)
     {
         $marqueModel = new MarqueModel();
         return $marqueModel->addMarque($marqueName);
+    }
+
+    public function getModelsOfMarque($marqueID)
+    {
+        $marqueModel = new MarqueModel();
+        return $marqueModel->getModelsOfMarque($marqueID);
+    }
+
+    public function getVersionsOfModel($model)
+    {
+        $marqueModel = new MarqueModel();
+        return $marqueModel->getVersionsOfModel($model);
+    }
+
+    public function getYearsofVersion($version)
+    {
+        $marqueModel = new MarqueModel();
+        return $marqueModel->getYearsofVersion($version);
     }
 
     public function deleteMarque($marqueID)
@@ -44,9 +62,42 @@ class MarqueController
         return $marqueModel->deleteMarque($marqueID);
     }
 
-    public function updateMarque($marqueID, $marqueName)
+    public function updateMarque($ID_Marque, $Nom, $Pays, $Année_de_création, $Siège_social)
     {
         $marqueModel = new MarqueModel();
-        return $marqueModel->updateMarque($marqueID, $marqueName);
+        try {
+            $marqueModel->updateMarque($ID_Marque, $Nom, $Pays, $Année_de_création, $Siège_social);
+            header("Location: /vscar/admin/vehicules");
+            exit;
+        } catch (\Throwable $th) {
+            $_SESSION['updateBrand_error'] = $th->getMessage();
+            echo $th->getMessage();
+            // header("Location: /vscar/admin/brands?brandId=$ID_Marque");
+        }
+    }
+
+    public function likeBrandByUser($userID, $brandID)
+    {
+        $marqueModel = new MarqueModel();
+        return $marqueModel->likeBrandByUser($userID, $brandID);
+
+    }
+
+    public function unlikeBrandByUser($userID, $brandID)
+    {
+        $marqueModel = new MarqueModel();
+        return $marqueModel->unlikeBrandByUser($userID, $brandID);
+    }
+
+    public function IsBrandLikedByUser($userID, $brandID)
+    {
+        $marqueModel = new MarqueModel();
+        return $marqueModel->IsBrandLikedByUser($userID, $brandID);
+    }
+
+    public function getBrandsLikedByUser($userID)
+    {
+        $marqueModel = new MarqueModel();
+        return $marqueModel->getBrandsLikedByUser($userID);
     }
 }

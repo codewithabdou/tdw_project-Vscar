@@ -10,6 +10,12 @@ class VehiculeController
         return $vehiculeModel->getVehiculeByID($vehiculeID);
     }
 
+    public function getVehiculesByBrandId($brandId)
+    {
+        $vehiculeModel = new VehiculeModel();
+        return $vehiculeModel->getVehiculesByBrandId($brandId);
+    }
+
     public function updateVehicule($ID_Vehicule, $Prix, $type_carburant, $puissance, $acceleration, $conso_carburant, $longueur, $largeur, $hauteur, $nb_places, $volume_coffre, $moteur, $Nom)
     {
         $vehiculeModel = new VehiculeModel();
@@ -21,6 +27,12 @@ class VehiculeController
             $_SESSION['updateVehicule_error'] = $th->getMessage();
             header("Location: /vscar/admin/vehicules?vehiculeId=$ID_Vehicule");
         }
+    }
+
+    public function getOneVehiculeIDByBrandAndModelAndVersionAndYear($brand, $model, $version, $year)
+    {
+        $vehiculeModel = new VehiculeModel();
+        return $vehiculeModel->getOneVehiculeIDByBrandAndModelAndVersionAndYear($brand, $model, $version, $year);
     }
 
     public function updateVehiculePhoto($photo, $vehiculeID)
@@ -70,6 +82,28 @@ class VehiculeController
     {
         $vehiculeModel = new VehiculeModel();
         return $vehiculeModel->getVehiculeByMarqueIDAndModele($marqueID, $modele);
+    }
+
+    public function likeVehiculeByUser($userId, $vehiculeId)
+    {
+        $vehiculeModel = new VehiculeModel();
+        return $vehiculeModel->likeVehiculeByUser($userId, $vehiculeId);
+    }
+
+    public function unlikeVehiculeByUser($userId, $vehiculeId)
+    {
+        $vehiculeModel = new VehiculeModel();
+        return $vehiculeModel->unlikeVehiculeByUser($userId, $vehiculeId);
+
+    }
+    public function IsVehiculeLikedByUser($userId, $vehiculeId){
+        $vehiculeModel = new VehiculeModel();
+        return $vehiculeModel->IsVehiculeLikedByUser($userId, $vehiculeId);
+    }
+
+    public function getVehiculesLikedByUser($userId){
+        $vehiculeModel = new VehiculeModel();
+        return $vehiculeModel->getVehiculesLikedByUser($userId);
     }
 
 

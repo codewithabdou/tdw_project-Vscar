@@ -16,10 +16,14 @@ class UserModel
         $result = $stmt->fetch();
         $dbController->disconnect($conn);
         if ($result) {
-            if ($result["Mot_de_passe"] === $password) {
-                return $result;
+            if ($result['Mot_de_passe'] === $password) {
+                if ($result['Statut'] === 'Actif') {
+                    return $result;
+                } else {
+                    throw new ErrorException("User is not active");
+                }
             } else {
-                throw new ErrorException("Wrong password");
+                throw new ErrorException("Invalid password");
             }
         } else {
             throw new ErrorException("Invalid username");
