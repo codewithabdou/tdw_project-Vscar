@@ -17,6 +17,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/SingleBrandView.
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/UserProfileView.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/VehiculeReviewsView.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/BrandReviewsView.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/NewsDetailsView.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/VehiculeView.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/ContactView.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/NotFoundPage.php");
@@ -56,6 +57,7 @@ $userProfileView = new UserProfileView();
 $brandReviewsView = new BrandReviewsView();
 $vehiculeReviewsView = new VehiculeReiewsView();
 $notFoundPage = new NotFoundPage();
+$newsDetailsView = new NewsDetailsView();
 
 
 switch ($request) {
@@ -78,7 +80,10 @@ switch ($request) {
             $brandReviewsView->displayBrandReviewsPage($brandId);
         break;
     case "/vscar/news":
-        $newsView->displayNewsPage();
+        if ($newsId)
+            $newsDetailsView->displayNewsDetailsPage($newsId);
+        else
+            $newsView->displayNewsPage();
         break;
     case "/vscar/guide":
         $guideView->displayGuidePage();

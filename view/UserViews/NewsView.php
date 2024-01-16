@@ -36,7 +36,7 @@ class NewsView
                                     <p class="card-text">
                                         <?= $newsItem['Texte']; ?>
                                     </p>
-                                    <a href="<?= $newsItem['lien']; ?>" class="btn btn-primary" target="_blank">Read More</a>
+                                    <a href="/vscar/news?newsId=<?= $newsItem['ID_News']; ?>" class="btn btn-primary">Read More</a>
                                 </div>
                             </div>
                         </div>
