@@ -2,6 +2,7 @@
 
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/controller/User.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/controller/ContactInfos.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/Home.php");
 
 class ContactView
@@ -15,6 +16,8 @@ class ContactView
     }
     public function displayContactForm()
     {
+        $contactInfosController = new ContactInfosController();
+        $contactInfos = $contactInfosController->getContactInfos()[0];
         ?>
         <!--Section: Contact v.2-->
         <section class="container">
@@ -28,93 +31,80 @@ class ContactView
 
             <div class="row">
 
-                <!--Grid column-->
                 <div class="col-md-9 mb-md-0 mb-5">
-                    <form id="contact-form" name="contact-form" action="mail.php" method="POST">
+                    <form id="contact-form" name="contact-form" action="/vscar/api/contact/addContact.php" method="POST">
 
-                        <!--Grid row-->
                         <div class="row">
 
-                            <!--Grid column-->
                             <div class="col-md-6">
                                 <div class="md-form mb-0">
-                                    <input type="text" id="name" name="name" class="form-control">
-                                    <label for="name" class="">Your name</label>
+                                    <label for="sender" class="">Your name</label>
+                                    <input required type="text" id="sender" name="sender" class="form-control mb-2">
                                 </div>
                             </div>
-                            <!--Grid column-->
 
-                            <!--Grid column-->
                             <div class="col-md-6">
                                 <div class="md-form mb-0">
-                                    <input type="text" id="email" name="email" class="form-control">
                                     <label for="email" class="">Your email</label>
+                                    <input required type="text" id="email" name="email" class="form-control mb-2">
                                 </div>
                             </div>
-                            <!--Grid column-->
 
                         </div>
-                        <!--Grid row-->
 
-                        <!--Grid row-->
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="md-form mb-0">
-                                    <input type="text" id="subject" name="subject" class="form-control">
                                     <label for="subject" class="">Subject</label>
+                                    <input required type="text" id="subject" name="subject" class="form-control mb-2">
                                 </div>
                             </div>
                         </div>
-                        <!--Grid row-->
 
-                        <!--Grid row-->
                         <div class="row">
 
-                            <!--Grid column-->
                             <div class="col-md-12">
 
                                 <div class="md-form">
-                                    <textarea type="text" id="message" name="message" rows="2"
-                                        class="form-control md-textarea"></textarea>
                                     <label for="message">Your message</label>
+                                    <textarea required type="text" id="message" name="message" rows="2"
+                                        class="form-control mb-2 md-textarea"></textarea>
                                 </div>
 
                             </div>
                         </div>
-                        <!--Grid row-->
+
+                        <button class="btn btn-primary" type="submit">Send</button>
 
                     </form>
 
-                    <div class="text-center text-md-left">
-                        <a class="btn btn-primary text-white"
-                            onclick="document.getElementById('contact-form').submit();">Send</a>
-                    </div>
-                    <div class="status"></div>
                 </div>
-                <!--Grid column-->
 
-                <!--Grid column-->
                 <div class="col-md-3 text-center">
                     <ul class="list-unstyled mb-0">
                         <li><i class="bx bx-map"></i>
-                            <p>ElHarrach , Algiers , Algeria</p>
+                            <p>
+                                <?= $contactInfos['adresse'] ?>
+                            </p>
                         </li>
 
                         <li><i class="bx bx-phone mt-4 "></i>
-                            <p>+213 776493221</p>
+                            <p>
+                                <?= $contactInfos['numéro'] ?>
+                            </p>
                         </li>
 
                         <li><i class="bx bx-envelope mt-4 f"></i>
-                            <p>contact@vscar.com</p>
+                            <p>
+                                <?= $contactInfos['email'] ?>
+                            </p>
                         </li>
                     </ul>
                 </div>
-                <!--Grid column-->
 
             </div>
 
         </section>
-        <!--Section: Contact v.2-->
         <?php
 
     }

@@ -4,6 +4,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AuthViews/SignUp.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/Home.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/UsersManagement.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/ReviewsManagement.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/SettingsManagement.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/NewsManagement.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/VehiculesManagement.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/Home.php");
@@ -18,6 +19,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/VehiculeReviewsV
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/BrandReviewsView.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/VehiculeView.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/ContactView.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/NotFoundPage.php");
 
 
 $request = rtrim(explode("?", $_SERVER["REQUEST_URI"])[0], "/");
@@ -36,6 +38,7 @@ $loginView = new LoginView();
 $SignUpView = new SignUpView();
 $userHomePage = new UserHomePage();
 $adminDashboard = new AdminHomePage();
+$adminSettingsManagement = new SettingsManagement();
 $adminUsersManagement = new UsersManagement();
 $adminVehiculesManagement = new VehiculesManagement();
 $adminReviewsManagement = new ReviewsManagement();
@@ -50,10 +53,14 @@ $userProfileView = new UserProfileView();
 $vehiculeView = new VehiculeView();
 $singleBrandView = new SingleBrandView();
 $userProfileView = new UserProfileView();
+$brandReviewsView = new BrandReviewsView();
+$vehiculeReviewsView = new VehiculeReiewsView();
+$notFoundPage = new NotFoundPage();
 
 
 switch ($request) {
     case "/vscar":
+
         $userHomePage->displayHomePage();
         break;
     case "/vscar/contact":
@@ -61,6 +68,14 @@ switch ($request) {
         break;
     case "/vscar/reviews":
         $reviewView->displayReviewsPage();
+        break;
+    case "/vscar/vehiculeReviews":
+        if ($vehiculeId)
+            $vehiculeReviewsView->displayVehiculeReviewsPage($vehiculeId);
+        break;
+    case "/vscar/brandReviews":
+        if ($brandId)
+            $brandReviewsView->displayBrandReviewsPage($brandId);
         break;
     case "/vscar/news":
         $newsView->displayNewsPage();
@@ -89,59 +104,116 @@ switch ($request) {
             $vehiculeView->displayVehiculePage($vehiculeId);
         break;
     case "/vscar/userProfile":
-        if ($userId)
-            $userProfileView->displayUserProfilePage($userId);
+        if (isset($_COOKIE['userId'])) {
+            if ($userId)
+                $userProfileView->displayUserProfilePage($userId);
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/login":
         $loginView->displayLoginPage();
         break;
     case "/vscar/signup":
-        echo $SignUpView->displaySignUpPage();
+        $SignUpView->displaySignUpPage();
         break;
     case "/vscar/admin/dashboard":
-        $adminDashboard->displayAdminDashboard();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            $adminDashboard->displayAdminDashboard();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/admin/vehicules":
-        if ($vehiculeId)
-            $adminVehiculesManagement->displayAdminVehicule($vehiculeId);
-        else
-            $adminVehiculesManagement->displayAdminVehicules();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            if ($vehiculeId)
+                $adminVehiculesManagement->displayAdminVehicule($vehiculeId);
+            else
+                $adminVehiculesManagement->displayAdminVehicules();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/admin/news":
-        if ($newsId)
-            $adminNewsManagement->displayAdminNewsUpdate($newsId);
-        else
-            $adminNewsManagement->displayAdminNews();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            if ($newsId)
+                $adminNewsManagement->displayAdminNewsUpdate($newsId);
+            else
+                $adminNewsManagement->displayAdminNews();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/admin/reviews":
-        $adminReviewsManagement->displayAdminReviews();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            $adminReviewsManagement->displayAdminReviews();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
+
     case "/vscar/admin/reviews/vehicules":
-        $adminReviewsManagement->displayAdminVehiculeReviews();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            $adminReviewsManagement->displayAdminVehiculeReviews();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/admin/reviews/brands":
-        $adminReviewsManagement->displayAdminBrandReviews();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            $adminReviewsManagement->displayAdminBrandReviews();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/admin/settings":
-        $adminDashboard->displayAdminSettings();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            $adminSettingsManagement->displaySettingsManagementPage();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/admin/users":
-        if ($userId)
-            $adminUsersManagement->displayAdminUser($userId);
-        else
-            $adminUsersManagement->displayAdminUsers();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            if ($userId)
+                $adminUsersManagement->displayAdminUser($userId);
+            else
+                $adminUsersManagement->displayAdminUsers();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     case "/vscar/admin/brands":
-        if ($brandId)
-            $adminVehiculesManagement->displayAdminBrand($brandId);
-        else
-            $adminVehiculesManagement->displayAdminVehicules();
-        break;
-    case "/vscar/admin/signout":
-        $adminDashboard->SignOut();
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            if ($brandId)
+                $adminVehiculesManagement->displayAdminBrand($brandId);
+            else
+                $adminVehiculesManagement->displayAdminVehicules();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
         break;
     default:
-        echo "404";
+        $notFoundPage->displayNotFoundPage();
 
 
 }

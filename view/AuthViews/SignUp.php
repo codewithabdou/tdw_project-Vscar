@@ -1,10 +1,16 @@
 <?php
 
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/Home.php");
+
 class SignUpView
 {
     public function displaySignUpPage()
     {
+        $home = new UserHomePage();
+        $home->displayHeader();
+        $home->displayMenu();
         $this->displayForm();
+        $home->displayFooter();
 
     }
     public function displayForm()
@@ -21,8 +27,9 @@ class SignUpView
         }
         ?>
 
-        <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-            <form class="container bg-light p-4 rounded" action="/vscar/api/auth/signup.php" method="POST">
+        <div class="d-flex align-items-center justify-content-center" style="min-height: 90vh;">
+            <form enctype="multipart/form-data" class="container bg-light p-4 rounded" action="/vscar/api/auth/signup.php"
+                method="POST">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label" for="firstname">First name</label>
@@ -51,10 +58,15 @@ class SignUpView
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label" for="birthday">Birthday</label>
                         <input value="<?php echo isset($formData['birthday']) ? $formData['birthday'] : ''; ?>"
                             class="form-control" type="date" name="birthday">
+                    </div>
+                    <div class="col-md-6" style="margin-top: 1.95rem;">
+                        <label class="custom-file-label" for="ImageUser">Image</label>
+                        <input class="custom-file-input" type="file" id="ImageUser" name="ImageUser">
+
                     </div>
                 </div>
                 <div class="row mb-3">

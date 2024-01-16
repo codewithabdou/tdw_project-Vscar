@@ -1,6 +1,7 @@
 <?php
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/DataBase.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/utils/images.php');
 
 
 
@@ -33,57 +34,124 @@ class VehiculeModel
     {
         if (empty($prix) || empty($vehiculeID) || empty($type_carburant) || empty($puissance) || empty($acceleration) || empty($conso_carburant) || empty($longueur) || empty($largeur) || empty($hauteur) || empty($nb_places) || empty($volume_coffre) || empty($moteur) || empty($Nom)) {
             throw new ErrorException("One or more fields are empty");
+        } else {
+            if (isset($_FILES['ImageCar']) && $_FILES['ImageCar']['error'] == UPLOAD_ERR_OK) {
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+
+                $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Véhicule = :vehiculeID");
+                $stmt->bindParam(':vehiculeID', $vehiculeID);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                $dbController->disconnect($conn);
+
+                if ($result === null) {
+                    throw new ErrorException("Vehicule doesn't exist");
+                }
+
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+                $stmt = $conn->prepare("UPDATE `véhicules`
+                SET `Prix` = :prix,
+                    `Type_Carburant` = :type_carburant,
+                    `Puissance` = :puissance,
+                    `Acceleration` = :acceleration,
+                    `Conso_Carburant` = :conso_carburant,
+                    `Longueur` = :longueur,
+                    `Largeur` = :largeur,
+                    `Hauteur` = :hauteur,
+                    `Nb_Places` = :nb_places,
+                    `Volume_Coffre` = :volume_coffre,
+                    `Moteur` = :moteur,
+                    `Nom` = :Nom,
+                    `Photo` = :Photo
+                WHERE ID_Véhicule = :vehiculeID
+            ");
+
+                $stmt->bindParam(':prix', $prix);
+                $stmt->bindParam(':type_carburant', $type_carburant);
+                $stmt->bindParam(':puissance', $puissance);
+                $stmt->bindParam(':acceleration', $acceleration);
+                $stmt->bindParam(':conso_carburant', $conso_carburant);
+                $stmt->bindParam(':longueur', $longueur);
+                $stmt->bindParam(':largeur', $largeur);
+                $stmt->bindParam(':hauteur', $hauteur);
+                $stmt->bindParam(':nb_places', $nb_places);
+                $stmt->bindParam(':volume_coffre', $volume_coffre);
+                $stmt->bindParam(':moteur', $moteur);
+                $stmt->bindParam(':Nom', $Nom);
+                $stmt->bindParam(':Photo', $_FILES['ImageCar']['name']);
+                $stmt->bindParam(':vehiculeID', $vehiculeID);
+
+                try {
+                    $stmt->execute();
+                    try {
+                        $imagesTraitement = new ImagesTraitement();
+                        $imagesTraitement->uploadImage('ImageCar', '/public/images/vehicules/');
+                        return true;
+                    } catch (\Throwable $th) {
+                        throw new ErrorException($th->getMessage());
+                    }
+                } catch (\Throwable $th) {
+                    throw new ErrorException($th->getMessage());
+                } finally {
+                    $dbController->disconnect($conn);
+                }
+                return true;
+
+            } else {
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+                $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Véhicule = :vehiculeID");
+                $stmt->bindParam(':vehiculeID', $vehiculeID);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                $dbController->disconnect($conn);
+
+                if ($result === null) {
+                    throw new ErrorException("Vehicule doesn't exist");
+                }
+
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+                $stmt = $conn->prepare("UPDATE `véhicules`
+                SET `Prix` = :prix,
+                    `Type_Carburant` = :type_carburant,
+                    `Puissance` = :puissance,
+                    `Acceleration` = :acceleration,
+                    `Conso_Carburant` = :conso_carburant,
+                    `Longueur` = :longueur,
+                    `Largeur` = :largeur,
+                    `Hauteur` = :hauteur,
+                    `Nb_Places` = :nb_places,
+                    `Volume_Coffre` = :volume_coffre,
+                    `Moteur` = :moteur,
+                    `Nom` = :Nom
+                WHERE ID_Véhicule = :vehiculeID
+            ");
+
+                $stmt->bindParam(':prix', $prix);
+                $stmt->bindParam(':type_carburant', $type_carburant);
+                $stmt->bindParam(':puissance', $puissance);
+                $stmt->bindParam(':acceleration', $acceleration);
+                $stmt->bindParam(':conso_carburant', $conso_carburant);
+                $stmt->bindParam(':longueur', $longueur);
+                $stmt->bindParam(':largeur', $largeur);
+                $stmt->bindParam(':hauteur', $hauteur);
+                $stmt->bindParam(':nb_places', $nb_places);
+                $stmt->bindParam(':volume_coffre', $volume_coffre);
+                $stmt->bindParam(':moteur', $moteur);
+                $stmt->bindParam(':Nom', $Nom);
+                $stmt->bindParam(':vehiculeID', $vehiculeID);
+
+                $stmt->execute();
+
+                $dbController->disconnect($conn);
+                return true;
+            }
         }
 
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Véhicule = :vehiculeID");
-        $stmt->bindParam(':vehiculeID', $vehiculeID);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $dbController->disconnect($conn);
 
-        if ($result === null) {
-            throw new ErrorException("Vehicule doesn't exist");
-        }
-
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("UPDATE `véhicules`
-        SET `Prix` = :prix,
-            `Type_Carburant` = :type_carburant,
-            `Puissance` = :puissance,
-            `Acceleration` = :acceleration,
-            `Conso_Carburant` = :conso_carburant,
-            `Longueur` = :longueur,
-            `Largeur` = :largeur,
-            `Hauteur` = :hauteur,
-            `Nb_Places` = :nb_places,
-            `Volume_Coffre` = :volume_coffre,
-            `Moteur` = :moteur,
-            `Nom` = :Nom
-        WHERE ID_Véhicule = :vehiculeID
-    ");
-
-        $stmt->bindParam(':prix', $prix);
-        $stmt->bindParam(':type_carburant', $type_carburant);
-        $stmt->bindParam(':puissance', $puissance);
-        $stmt->bindParam(':acceleration', $acceleration);
-        $stmt->bindParam(':conso_carburant', $conso_carburant);
-        $stmt->bindParam(':longueur', $longueur);
-        $stmt->bindParam(':largeur', $largeur);
-        $stmt->bindParam(':hauteur', $hauteur);
-        $stmt->bindParam(':nb_places', $nb_places);
-        $stmt->bindParam(':volume_coffre', $volume_coffre);
-        $stmt->bindParam(':moteur', $moteur);
-        $stmt->bindParam(':Nom', $Nom);
-        $stmt->bindParam(':vehiculeID', $vehiculeID);
-
-        $stmt->execute();
-
-        // $this->updateVehiculePhoto($photo, $vehiculeID);
-        $dbController->disconnect($conn);
-        return true;
     }
 
     public function getOneVehiculeIDByBrandAndModelAndVersionAndYear($brand, $model, $version, $year)
@@ -102,35 +170,7 @@ class VehiculeModel
     }
 
 
-    public function updateVehiculePhoto($photo, $vehiculeID)
-    {
-        if (empty($photo) || empty($vehiculeID)) {
-            throw new ErrorException("One or more fields are empty");
-        }
 
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Véhicule = :vehiculeID");
-        $stmt->bindParam(':vehiculeID', $vehiculeID);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $dbController->disconnect($conn);
-        if ($result === null) {
-            throw new ErrorException("Vehicule doesn't exist");
-        }
-
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("UPDATE `photos_véhicule`
-        SET `Photo` = :photo
-        WHERE ID_Véhicule = :vehiculeID
-        ");
-        $stmt->bindParam(':photo', $photo);
-        $stmt->bindParam(':vehiculeID', $vehiculeID);
-        $stmt->execute();
-        $dbController->disconnect($conn);
-        return true;
-    }
 
     public function getVehiculePhotosByID($vehiculeID)
     {
@@ -157,69 +197,117 @@ class VehiculeModel
 
     public function addVehicule($ID_Marque, $Modele, $Version, $Annee, $Prix, $type_carburant, $puissance, $acceleration, $conso_carburant, $longueur, $largeur, $hauteur, $nb_places, $volume_coffre, $moteur, $Nom)
     {
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("INSERT INTO `véhicules` (
-            `ID_Marque`, 
-            `Modèle`, 
-            `Version`, 
-            `Année`, 
-            `Prix`, 
-            `type_carburant`, 
-            `puissance`, 
-            `acceleration`, 
-            `conso_carburant`, 
-            `longueur`, 
-            `largeur`, 
-            `hauteur`, 
-            `nb_places`, 
-            `volume_coffre`, 
-            `moteur`,
-            `Nom`
-            ) VALUES ( :ID_Marque, :Modele, :Version, :Annee, :Prix, :type_carburant, :puissance, :acceleration, :conso_carburant, :longueur, :largeur, :hauteur, :nb_places, :volume_coffre, :moteur, :Nom)");
-        $stmt->bindParam(':ID_Marque', $ID_Marque);
-        $stmt->bindParam(':Modele', $Modele);
-        $stmt->bindParam(':Version', $Version);
-        $stmt->bindParam(':Annee', $Annee);
-        $stmt->bindParam(':Prix', $Prix);
-        $stmt->bindParam(':type_carburant', $type_carburant);
-        $stmt->bindParam(':puissance', $puissance);
-        $stmt->bindParam(':acceleration', $acceleration);
-        $stmt->bindParam(':conso_carburant', $conso_carburant);
-        $stmt->bindParam(':longueur', $longueur);
-        $stmt->bindParam(':largeur', $largeur);
-        $stmt->bindParam(':hauteur', $hauteur);
-        $stmt->bindParam(':nb_places', $nb_places);
-        $stmt->bindParam(':volume_coffre', $volume_coffre);
-        $stmt->bindParam(':moteur', $moteur);
-        $stmt->bindParam(':Nom', $Nom);
+        if (empty($ID_Marque) || empty($Modele) || empty($Version) || empty($Annee) || empty($Prix) || empty($type_carburant) || empty($puissance) || empty($acceleration) || empty($conso_carburant) || empty($longueur) || empty($largeur) || empty($hauteur) || empty($nb_places) || empty($volume_coffre) || empty($moteur) || empty($Nom)) {
+            throw new ErrorException("One or more fields are empty");
+        } else {
+            if (isset($_FILES['ImageCar']) && $_FILES['ImageCar']['error'] == UPLOAD_ERR_OK) {
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+                $stmt = $conn->prepare("INSERT INTO `véhicules` (
+                    `ID_Marque`, 
+                    `Modèle`, 
+                    `Version`, 
+                    `Année`, 
+                    `Prix`, 
+                    `type_carburant`, 
+                    `puissance`, 
+                    `acceleration`, 
+                    `conso_carburant`, 
+                    `longueur`, 
+                    `largeur`, 
+                    `hauteur`, 
+                    `nb_places`, 
+                    `volume_coffre`, 
+                    `moteur`,
+                    `Nom`,
+                    `Photo`
+                    ) VALUES ( :ID_Marque, :Modele, :Version, :Annee, :Prix, :type_carburant, :puissance, :acceleration, :conso_carburant, :longueur, :largeur, :hauteur, :nb_places, :volume_coffre, :moteur, :Nom, :Photo)");
+                $stmt->bindParam(':ID_Marque', $ID_Marque);
+                $stmt->bindParam(':Modele', $Modele);
+                $stmt->bindParam(':Version', $Version);
+                $stmt->bindParam(':Annee', $Annee);
+                $stmt->bindParam(':Prix', $Prix);
+                $stmt->bindParam(':type_carburant', $type_carburant);
+                $stmt->bindParam(':puissance', $puissance);
+                $stmt->bindParam(':acceleration', $acceleration);
+                $stmt->bindParam(':conso_carburant', $conso_carburant);
+                $stmt->bindParam(':longueur', $longueur);
+                $stmt->bindParam(':largeur', $largeur);
+                $stmt->bindParam(':hauteur', $hauteur);
+                $stmt->bindParam(':nb_places', $nb_places);
+                $stmt->bindParam(':volume_coffre', $volume_coffre);
+                $stmt->bindParam(':moteur', $moteur);
+                $stmt->bindParam(':Nom', $Nom);
+                $stmt->bindParam(':Photo', $_FILES['ImageCar']['name']);
+                try {
+                    $stmt->execute();
+                    try {
+                        $imagesTraitement = new ImagesTraitement();
+                        $imagesTraitement->uploadImage('ImageCar', '/public/images/vehicules/');
+                        return true;
+                    } catch (\Throwable $th) {
+                        $last_id = $conn->lastInsertId();
+                        $this->deleteVehicule($last_id);
+                        throw new ErrorException($th->getMessage());
+                    }
+                } catch (\Throwable $th) {
+                    throw new ErrorException($th->getMessage());
+                } finally {
+                    $dbController->disconnect($conn);
+                }
+            } else {
 
-        $stmt->execute();
-        // $vehiculeID = $conn->lastInsertId();
-        // $stmt = $conn->prepare("INSERT INTO `photos_véhicule`(`ID_Véhicule`, `Photo`) VALUES (:vehiculeID,:photo)");
-        // $stmt->bindParam(':vehiculeID', $vehiculeID);
-        // $stmt->bindParam(':photo', $photo);
-        // $stmt->execute();
-        $dbController->disconnect($conn);
-        return true;
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+                $stmt = $conn->prepare("INSERT INTO `véhicules` (
+                `ID_Marque`, 
+                `Modèle`, 
+                `Version`, 
+                `Année`, 
+                `Prix`, 
+                `type_carburant`, 
+                `puissance`, 
+                `acceleration`, 
+                `conso_carburant`, 
+                `longueur`, 
+                `largeur`, 
+                `hauteur`, 
+                `nb_places`, 
+                `volume_coffre`, 
+                `moteur`,
+                `Nom`
+                ) VALUES ( :ID_Marque, :Modele, :Version, :Annee, :Prix, :type_carburant, :puissance, :acceleration, :conso_carburant, :longueur, :largeur, :hauteur, :nb_places, :volume_coffre, :moteur, :Nom)");
+                $stmt->bindParam(':ID_Marque', $ID_Marque);
+                $stmt->bindParam(':Modele', $Modele);
+                $stmt->bindParam(':Version', $Version);
+                $stmt->bindParam(':Annee', $Annee);
+                $stmt->bindParam(':Prix', $Prix);
+                $stmt->bindParam(':type_carburant', $type_carburant);
+                $stmt->bindParam(':puissance', $puissance);
+                $stmt->bindParam(':acceleration', $acceleration);
+                $stmt->bindParam(':conso_carburant', $conso_carburant);
+                $stmt->bindParam(':longueur', $longueur);
+                $stmt->bindParam(':largeur', $largeur);
+                $stmt->bindParam(':hauteur', $hauteur);
+                $stmt->bindParam(':nb_places', $nb_places);
+                $stmt->bindParam(':volume_coffre', $volume_coffre);
+                $stmt->bindParam(':moteur', $moteur);
+                $stmt->bindParam(':Nom', $Nom);
+
+                try {
+                    $stmt->execute();
+                    return true;
+                } catch (\Throwable $th) {
+                    throw new ErrorException($th->getMessage());
+                } finally {
+                    $dbController->disconnect($conn);
+                }
+            }
+        }
     }
 
     public function deleteVehicule($vehiculeID)
     {
-        if (empty($vehiculeID)) {
-            throw new ErrorException("One or more fields are empty");
-        }
-
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("SELECT * FROM véhicules WHERE ID_Véhicule = :vehiculeID");
-        $stmt->bindParam(':vehiculeID', $vehiculeID);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $dbController->disconnect($conn);
-        if ($result === null) {
-            throw new ErrorException("Vehicule doesn't exist");
-        }
 
         $dbController = new DataBaseController();
         $conn = $dbController->connect();
@@ -301,7 +389,7 @@ class VehiculeModel
         return $result;
     }
 
-    
+
 
     public function IsVehiculeLikedByUser($userId, $vehiculeId)
     {

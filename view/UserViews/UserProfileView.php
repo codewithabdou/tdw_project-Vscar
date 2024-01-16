@@ -37,7 +37,27 @@ class UserProfileView
 
                 <div class="row">
                     <div class="col-md-6">
-                        <img src='/vscar/public/images/users/<?= $user["Image"]; ?>' class="img-fluid" alt="User Image">
+                        <img src='/vscar/public/images/users/<?= $user["Photo"]; ?>' class="img-fluid" alt="User Image">
+                        <form enctype="multipart/form-data" method="POST" action="/vscar/api/user/updateProfileImage.php">
+
+                            <div class="col-md-4" style="margin-top: 1.95rem;">
+                                <label class="custom-file-label" for="ImageUser">Image</label>
+                                <input class="custom-file-input" type="file" id="ImageUser" required name="ImageUser"
+                                    onchange="displayCurrentImageNews(this)">
+                                <p id="currentImageDisplayNews">Current Image:
+                                    <img src=<?= '/vscar/public/images/users/' . $user["Photo"] ?> style="padding: 5px;"
+                                        width="40" height="40" />
+                                </p>
+                            </div>
+                            <?php
+                            if (isset($_SESSION['updateUserImage_error'])) {
+                                echo '<div class="text-danger">' . $_SESSION['updateUserImage_error'] . '</div>';
+                                unset($_SESSION['updateUserImage_error']);
+                            }
+                            ?>
+                            <button class="btn btn-primary" type="submit">Update Image</button>
+
+                        </form>
 
 
 
@@ -183,7 +203,7 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php
@@ -281,7 +301,7 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php
@@ -390,7 +410,7 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php
@@ -488,7 +508,7 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php

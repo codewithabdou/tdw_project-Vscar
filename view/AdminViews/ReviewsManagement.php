@@ -78,19 +78,19 @@ class ReviewsManagement
                 </select>
             </div>
 
-            <table class="table table-bordered table-striped">
+            <table data-page-size="5" data-pagination="true" data-toggle="table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Owner</th>
-                        <th>Comment</th>
-                        <th>Status</th>
+                        <th data-sortable="true" data-field="ID">ID</th>
+                        <th data-sortable="true" data-field="Owner">Owner</th>
+                        <th data-sortable="true" data-field="Comment">Comment</th>
+                        <th data-sortable="true" data-field="Status">Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($reviewsToShow as $review) {
+                    foreach ($vehiculesReviews as $review) {
                         // Apply status filter
                         if ($statusFilter == '' || $review["Statut"] == $statusFilter) {
                             ?>
@@ -136,26 +136,7 @@ class ReviewsManagement
                     ?>
                 </tbody>
             </table>
-            <ul class="pagination justify-content-end">
-                <li class="page-item <?= ($currentPage == 1) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage - 1 ?>&status=<?= $statusFilter ?>" tabindex="-1"
-                        aria-disabled="true">Previous</a>
-                </li>
-                <?php
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    ?>
-                    <li class="page-item <?= ($i == $currentPage) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?= $i ?>&status=<?= $statusFilter ?>">
-                            <?= $i; ?>
-                        </a>
-                    </li>
-                    <?php
-                }
-                ?>
-                <li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage + 1 ?>&status=<?= $statusFilter ?>">Next</a>
-                </li>
-            </ul>
+
             <?php
 
     }
@@ -204,20 +185,19 @@ class ReviewsManagement
                     </select>
                 </div>
 
-                <table class="table table-bordered table-striped">
+                <table data-page-size="5" data-pagination="true" data-toggle="table" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Owner</th>
-                            <th>Comment</th>
-                            <th>Status</th>
+                            <th data-sortable="true" data-field="ID">ID</th>
+                            <th data-sortable="true" data-field="Owner">Owner</th>
+                            <th data-sortable="true" data-field="Comment">Comment</th>
+                            <th data-sortable="true" data-field="Status">Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($reviewsToShow as $review) {
-                            // Apply status filter
+                        foreach ($brandsReviews as $review) {
                             if ($statusFilter == '' || $review["Statut"] == $statusFilter) {
                                 ?>
                                 <tr>
@@ -260,26 +240,7 @@ class ReviewsManagement
                         } ?>
                     </tbody>
                 </table>
-                <ul class="pagination justify-content-end">
-                    <li class="page-item <?= ($currentPage == 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?page=<?= $currentPage - 1 ?>&status=<?= $statusFilter ?>" tabindex="-1"
-                            aria-disabled="true">Previous</a>
-                    </li>
-                    <?php
-                    for ($i = 1; $i <= $totalPages; $i++) {
-                        ?>
-                        <li class="page-item <?= ($i == $currentPage) ? 'active' : ''; ?>">
-                            <a class="page-link" href="?page=<?= $i ?>&status=<?= $statusFilter ?>">
-                                <?= $i; ?>
-                            </a>
-                        </li>
-                        <?php
-                    }
-                    ?>
-                    <li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?page=<?= $currentPage + 1 ?>&status=<?= $statusFilter ?>">Next</a>
-                    </li>
-                </ul>
+
 
                 <?php
 

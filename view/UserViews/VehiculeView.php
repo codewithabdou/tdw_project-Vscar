@@ -56,7 +56,8 @@ class VehiculeView
                                         <div class="card-body">
                                             <div class=" d-flex justify-content-between align-items-center p-1">
                                                 <p style="font-weight: 900;">
-                                                    <img style="border: 1px solid black;" class="rounded-circle"
+                                                    <img style="border: 1px solid black;" height="20" width="20"
+                                                        class="rounded-circle"
                                                         src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                                     <?php
@@ -200,6 +201,9 @@ class VehiculeView
                             <li class="list-group-item">Make:
                                 <?= $marqueController->getMarqueNameByID($vehicule["ID_Marque"]); ?>
                             </li>
+                            <li class="list-group-item">Name:
+                                <?= $vehicule["Nom"] ?>
+                            </li>
                             <li class="list-group-item">Model:
                                 <?= $vehicule["Modèle"] ?>
                             </li>
@@ -207,7 +211,34 @@ class VehiculeView
                                 <?= $vehicule["Année"] ?>
                             </li>
                             <li class="list-group-item">Price:
-                                <?= $vehicule["Prix"] ?>
+                                <?= $vehicule["Prix"] ?> DA
+                            </li>
+                            <li class="list-group-item">Engine:
+                                <?= $vehicule["moteur"] ?>
+                            </li>
+                            <li class="list-group-item">Power:
+                                <?= $vehicule["puissance"] ?> horse
+                            </li>
+                            <li class="list-group-item">Acceleration:
+                                <?= $vehicule["acceleration"] ?> s
+                            </li>
+                            <li class="list-group-item">Fuel Consumption:
+                                <?= $vehicule["conso_carburant"] ?> L/100KM
+                            </li>
+                            <li class="list-group-item">Length:
+                                <?= $vehicule["longueur"] ?> cm
+                            </li>
+                            <li class="list-group-item">Width:
+                                <?= $vehicule["largeur"] ?> cm
+                            </li>
+                            <li class="list-group-item">Height:
+                                <?= $vehicule["hauteur"] ?> cm
+                            </li>
+                            <li class="list-group-item">Number of Seats:
+                                <?= $vehicule["nb_places"] ?>
+                            </li>
+                            <li class="list-group-item">Trunk Volume:
+                                <?= $vehicule["volume_coffre"] ?> L
                             </li>
                             <li class="list-group-item">Engine:
                                 <?= $vehicule["moteur"] ?>
@@ -231,7 +262,7 @@ class VehiculeView
         $comparaisonController = new ComparaisonController();
         $mostCompared = $comparaisonController->getMostComparedCarsWithCar($id);
         $vehiculeController = new VehiculeController();
-        $vehicule1 = $vehiculeController->getVehiculeById($id);
+        $vehicule1 = null;
         $vehicule2 = null;
         $vehicule3 = null;
         $vehicule4 = null;
@@ -249,14 +280,17 @@ class VehiculeView
                 }
                 foreach ($mostCompared as $comparaison) {
                     if ($comparaison['ID_Véhicule3'] == null) {
+                        $vehicule1 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule1']);
                         $vehicule2 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule2']);
                         $vehicule3 = null;
                         $vehicule4 = null;
                     } else if ($comparaison['ID_Véhicule4'] == null) {
+                        $vehicule1 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule1']);
                         $vehicule2 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule2']);
                         $vehicule3 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule3']);
                         $vehicule4 = null;
                     } else {
+                        $vehicule1 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule1']);
                         $vehicule2 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule2']);
                         $vehicule3 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule3']);
                         $vehicule4 = $vehiculeController->getVehiculeById($comparaison['ID_Véhicule4']);

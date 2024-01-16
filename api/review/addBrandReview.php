@@ -12,7 +12,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_COOKIE['userId'])) {
         header("Location: /vscar/brands?brandId=" . $brandId . "");
     }
     $reviewController->addBrandReview($brandId, $userId, $rating, $comment);
-    header("Location: /vscar/brands?brandId=" . $brandId . "");
+    // check from where the request came from
+    $referer = $_SERVER['HTTP_REFERER'] ?? null;
+    if ($referer != null) {
+        if (strpos($referer, "Reviews") !== false) {
+            header("Location: /vscar/brandReviews?brandId=" . $brandId . "");
+        } else {
+            header("Location: /vscar/brands?brandId=" . $brandId . "");
+        }
+    }
 } else {
     header("Location: /vscar/");
 }

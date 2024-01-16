@@ -37,19 +37,19 @@ class UsersManagement
                 <input type="text" class="form-control" id="searchUserInput" placeholder="Search...">
             </div>
 
-            <table class="table table-bordered table-striped">
+            <table data-page-size="5" data-pagination="true" data-toggle="table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Status</th>
+                        <th data-sortable="true" data-field="ID">ID</th>
+                        <th data-sortable="true" data-field="Full Name">Full Name</th>
+                        <th data-sortable="true" data-field="Username">Username</th>
+                        <th data-sortable="true" data-field="Status">Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($usersToShow as $user) {
+                    foreach ($users as $user) {
                         ?>
                         <tr>
                             <td>
@@ -97,25 +97,7 @@ class UsersManagement
                 </tbody>
             </table>
 
-            <ul class="pagination justify-content-end">
-                <li class="page-item <?= ($currentPage == 1) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage - 1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <?php
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    ?>
-                    <li class="page-item <?= ($i == $currentPage) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?= $i; ?>">
-                            <?= $i; ?>
-                        </a>
-                    </li>
-                    <?php
-                }
-                ?>
-                <li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage + 1 ?>">Next</a>
-                </li>
-            </ul>
+
 
         </div>
         <?php

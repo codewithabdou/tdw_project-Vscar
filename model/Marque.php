@@ -3,6 +3,8 @@
 //Marque model class
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/DataBase.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/utils/images.php");
+
 
 class MarqueModel
 {
@@ -55,18 +57,35 @@ class MarqueModel
         return $result;
     }
 
-    public function addMarque($marqueName)
+    public function addMarque($Nom, $Pays, $Année_de_création, $Siège_social)
     {
-        if (empty($marqueName)) {
+
+        if (!isset($_FILES['ImageBrand']) || $_FILES['ImageBrand']['error'] == UPLOAD_ERR_NO_FILE) {
+            throw new ErrorException("No file uploaded");
+        }
+        if (empty($Nom) || empty($Pays) || empty($Année_de_création) || empty($Siège_social)) {
             throw new ErrorException("One or more fields are empty");
         }
 
         $dbController = new DataBaseController();
         $conn = $dbController->connect();
-        $stmt = $conn->prepare("INSERT INTO `marques` (`Nom`) VALUES (:marqueName)");
-        $stmt->bindParam(':marqueName', $marqueName);
-        $stmt->execute();
-        $dbController->disconnect($conn);
+        $stmt = $conn->prepare("INSERT INTO marques (Nom, Pays_d_origine, Siège_social, Année_de_création, Photo) VALUES ('$Nom', '$Pays', '$Siège_social', '$Année_de_création', '{$_FILES['ImageBrand']['name']}')");
+        try {
+            $stmt->execute();
+            try {
+                $imagesTraitement = new ImagesTraitement();
+                $imagesTraitement->uploadImage('ImageBrand', '/public/images/brands/');
+                return true;
+            } catch (\Throwable $th) {
+                $this->deleteMarque($conn->lastInsertId());
+                throw new ErrorException($th->getMessage());
+            }
+        } catch (\Throwable $th) {
+            throw new ErrorException($th->getMessage());
+        } finally {
+            $dbController->disconnect($conn);
+        }
+
     }
 
     public function deleteMarque($marqueID)
@@ -87,24 +106,46 @@ class MarqueModel
     {
         if (empty($ID_Marque) || empty($Nom) || empty($Pays) || empty($Année_de_création) || empty($Siège_social)) {
             throw new ErrorException("One or more fields are empty");
+        } else {
+            if (isset($_FILES['ImageBrand']) && $_FILES['ImageBrand']['error'] != UPLOAD_ERR_NO_FILE) {
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+
+                $stmt = $conn->prepare("UPDATE marques SET Nom = '$Nom', Pays_d_origine = '$Pays', Siège_social = '$Siège_social', Année_de_création = '$Année_de_création', Photo = '{$_FILES['ImageBrand']['name']}' WHERE ID_Marque = '$ID_Marque'");
+
+                try {
+                    $stmt->execute();
+                    try {
+                        $imagesTraitement = new ImagesTraitement();
+                        $imagesTraitement->uploadImage('ImageBrand', '/public/images/brands/');
+                        return true;
+                    } catch (\Throwable $th) {
+                        throw new ErrorException($th->getMessage());
+                    }
+                } catch (\Throwable $th) {
+                    throw new ErrorException($th->getMessage());
+                } finally {
+                    $dbController->disconnect($conn);
+                }
+            } else {
+                $dbController = new DataBaseController();
+                $conn = $dbController->connect();
+
+                $stmt = $conn->prepare("UPDATE marques SET Nom = '$Nom', Pays_d_origine = '$Pays', Siège_social = '$Siège_social', Année_de_création = '$Année_de_création' WHERE ID_Marque = '$ID_Marque'");
+
+
+                try {
+                    $stmt->execute();
+                    return true;
+                } catch (\Throwable $th) {
+                    throw new ErrorException($th->getMessage());
+                } finally {
+                    $dbController->disconnect($conn);
+                }
+            }
         }
-
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-
-        $stmt = $conn->prepare("UPDATE `marques` SET `Nom`='$Nom',`Pays_d_origine`='$Pays',`Siège_social`='$Siège_social',`Année_de_création`='$Année_de_création' WHERE `ID_Marque`='$ID_Marque'");
-
-
-
-        echo $stmt->queryString;
-
-
-        $stmt->execute();
-
-
-        $dbController->disconnect($conn);
-        return true;
     }
+
 
     public function getModelsOfMarque($marqueID)
     {

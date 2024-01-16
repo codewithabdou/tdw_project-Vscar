@@ -1,6 +1,7 @@
 <?php
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/DataBase.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/utils/images.php');
 
 
 
@@ -128,6 +129,35 @@ class UserModel
         return $result;
     }
 
+    public function updateUserProfileImage($userId)
+    {
+        if (isset($_FILES['ImageUser']) && $_FILES['ImageUser']['error'] == UPLOAD_ERR_OK) {
+            $dbController = new DataBaseController();
+            $imagesTraitement = new ImagesTraitement();
+            $conn = $dbController->connect();
+            $stmt = $conn->prepare("UPDATE utilisateurs SET Photo = :image WHERE ID_Utilisateur = :userId");
+            $stmt->bindParam(':userId', $userId);
+            $stmt->bindParam(':image', $_FILES['ImageUser']['name']);
+            try {
+                $stmt->execute();
+                try {
+                    $imagesTraitement->uploadImage('ImageUser', '/public/images/users/');
+                    return true;
+                } catch (\Throwable $th) {
+                    throw new ErrorException($th->getMessage());
+                }
+            } catch (\Throwable $th) {
+                throw new ErrorException($stmt->queryString);
+            } finally {
+                $dbController->disconnect($conn);
+            }
+        } else {
+            throw new ErrorException("Image not found");
+
+        }
+
+    }
+
     public function updateUser($userId, $firstname, $lastname, $gender, $birthday)
     {
         if (empty($firstname) || empty($lastname) || empty($gender) || empty($birthday)) {
@@ -180,6 +210,13 @@ class UserModel
             throw new ErrorException("One or more fields are empty");
         }
 
+        if (strlen($password) < 8)
+            throw new ErrorException("Password must be at least 8 characters long");
+
+        if (!isset($_FILES['ImageUser']) || $_FILES['ImageUser']['error'] != UPLOAD_ERR_OK)
+            throw new ErrorException("Image not found");
+
+
         $dbController = new DataBaseController();
         $conn = $dbController->connect();
         $stmt = $conn->prepare("SELECT * FROM utilisateurs WHERE Username = :username");
@@ -194,16 +231,28 @@ class UserModel
         if ($password === $confirmedPassword) {
             $dbController = new DataBaseController();
             $conn = $dbController->connect();
-            $stmt = $conn->prepare("INSERT INTO `utilisateurs` (`Nom`, `Prénom`, `Username`, `Mot_de_passe`, `Photo`, `Type`, `Sexe`, `Date_de_naissance`) VALUES (:firstname, :lastname, :username, :password, 'user.png', 'Utilisateur', :gender, :birthday)");
+            $stmt = $conn->prepare("INSERT INTO `utilisateurs` (`Nom`, `Prénom`, `Username`, `Mot_de_passe`, `Type`, `Sexe`, `Date_de_naissance`,`Photo`) VALUES (:firstname, :lastname, :username, :password, 'Utilisateur', :gender, :birthday,:photo)");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $password);
             $stmt->bindParam(':firstname', $firstname);
             $stmt->bindParam(':lastname', $lastname);
             $stmt->bindParam(':birthday', $birthday);
             $stmt->bindParam(':gender', $gender);
-            $stmt->execute();
-            $dbController->disconnect($conn);
-            return true;
+            $stmt->bindParam(':photo', $_FILES['ImageUser']['name']);
+            try {
+                $stmt->execute();
+                try {
+                    $imagesTraitement = new ImagesTraitement();
+                    $imagesTraitement->uploadImage('ImageUser', '/public/images/users/');
+                    return true;
+                } catch (\Throwable $th) {
+                    throw new ErrorException($th->getMessage());
+                }
+            } catch (\Throwable $th) {
+                throw new ErrorException($th->getMessage());
+            } finally {
+                $dbController->disconnect($conn);
+            }
         } else {
             throw new ErrorException("Passwords don't match");
         }

@@ -544,26 +544,54 @@ class UserHomePage
 
         ?>
 
-        <div style="background-color : rgba(0,0,0,0.5) ;" id="carouselExampleSlidesOnly" class="carousel slide"
-            data-bs-ride="carousel">
-            <div style="background-color : rgba(0,0,0,0.5) ;" class="carousel-inner">
+        <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <?php
+                for ($key = 0; $key < count($newsToShowInHome); $key++) {
+                    if ($key === 0) {
+                        echo '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 0"></button>';
+                    } else {
+                        echo '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="' . $key . '" aria-label="Slide ' . ($key) . '"></button>';
+                    }
+                }
+
+                ?>
+
+            </div>
+            <div style=" height: 90vh;" class="carousel-inner">
+
                 <?php
                 foreach ($newsToShowInHome as $key => $news) {
                     if ($key === 0) {
-                        echo '<div class="carousel-item carousel-image active" style="background-image: url(/vscar/public/images/news/' . $news['Image'] . '); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); position : relative">';
+                        echo '<div style="height: 90vh;" class="carousel-item  active">';
                     } else {
-                        echo '<div class="carousel-item carousel-image" style="background-image: url(/vscar/public/images/news/' . $news['Image'] . '); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); position:relative">';
+                        echo '<div style="height: 90vh; " class="carousel-item">';
                     }
-                    echo '<div style="position:absolute; top : 0; left : 0 ; height : 100% ; width : 100% ; background-color : rgba(0,0,0,0.5) ; z-index : 100" class=" d-flex flex-column align-items-center justify-content-center">';
-                    echo '<h1 class="text-center">' . $news['Titre'] . '</h1>';
-                    echo '<p class="text-center">' . $news['Texte'] . '</p>';
-                    echo '</div>';
-                    echo '</div>';
+                    ?>
+                    <img src="/vscar/public/images/news/<?= $news['Image']; ?>" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 class="px-5 py-2" style="font-weight: bold; background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
+                            <?= $news['Titre']; ?>
+                        </h5>
+                        <p class="px-5 py-2" style=" background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
+                            <?= $news['Texte']; ?>
+                            <span style="font-weight: bold;"><a target="_blank" href="<?= $news['lien']; ?>">read more
+                                    ...</a></span>
+                        </p>
+                    </div>
+                </div>
+
+                <?php
                 }
 
 
                 ?>
-            </div>
+
+
+
+
+        </div>
         </div>
         <?php
     }
@@ -571,10 +599,10 @@ class UserHomePage
     public function displayMenu()
     {
         ?>
-        <nav class="navbar  navbar-expand-lg navbar-light bg-light">
+        <nav class=" navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse d-flex justify-content-center navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav w-100 d-flex justify-content-around">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/vscar/"><i class='bx bx-home'></i> Home</a>
                     </li>
                     <li class="nav-item">

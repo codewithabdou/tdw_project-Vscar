@@ -56,7 +56,7 @@ class SingleBrandView
                                         <div class="card-body">
                                             <div class=" d-flex justify-content-between align-items-center p-1">
                                                 <p style="font-weight: 900;">
-                                                    <img style="border: 1px solid black;" class="rounded-circle"
+                                                    <img style="border: 1px solid black;" height="20" width="20" class="rounded-circle"
                                                         src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                                     <?php

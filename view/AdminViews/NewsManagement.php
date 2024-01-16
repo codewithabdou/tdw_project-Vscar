@@ -142,19 +142,19 @@ class NewsManagement
                 <input type="text" class="form-control" id="searchNewsInput" placeholder="Search...">
             </div>
 
-            <table class="table table-bordered table-striped">
+            <table data-page-size="5" data-pagination="true" data-toggle="table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Text</th>
-                        <th>External link</th>
+                        <th data-sortable="true" data-field="ID">ID</th>
+                        <th data-sortable="true" data-field="Title">Title</th>
+                        <th data-sortable="true" data-field="Text">Text</th>
+                        <th data-sortable="true" data-field="External link">External link</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($newsToShow as $singleNews) {
+                    foreach ($news as $singleNews) {
                         ?>
                         <tr>
                             <td>
@@ -183,25 +183,7 @@ class NewsManagement
                     ?>
                 </tbody>
             </table>
-            <ul class="pagination justify-content-end">
-                <li class="page-item <?= ($currentPage == 1) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage - 1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <?php
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    ?>
-                    <li class="page-item <?= ($i == $currentPage) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?= $i; ?>">
-                            <?= $i; ?>
-                        </a>
-                    </li>
-                    <?php
-                }
-                ?>
-                <li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage + 1 ?>">Next</a>
-                </li>
-            </ul>
+
 
 
 

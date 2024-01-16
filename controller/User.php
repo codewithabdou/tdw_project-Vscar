@@ -15,10 +15,12 @@ class UserController
             $user = $userModel->login($username, $password);
             setcookie('loggedIn', 'true', time() + (86400 * 30), "/");
             setcookie('userId', $user["ID_Utilisateur"], time() + (86400 * 30), "/");
+            setcookie('userType', $user["Type"], time() + (86400 * 30), "/");
             if ($user["Type"] === "Admin")
                 header("Location: /vscar/admin/dashboard");
-            else
+            else {
                 header("Location: /vscar");
+            }
             exit;
         } catch (\Throwable $th) {
             $_SESSION['login_error'] = $th->getMessage();
@@ -30,8 +32,10 @@ class UserController
     {
         unset($_COOKIE['loggedIn']);
         unset($_COOKIE['userId']);
+        unset($_COOKIE['userType']);
         setcookie('loggedIn', null, -1, '/');
         setcookie('userId', null, -1, '/');
+        setcookie('userType', null, -1, '/');
         header("Location: /vscar");
     }
 
@@ -89,6 +93,23 @@ class UserController
                 header("Location: /vscar/userProfile?userId=$userId");
             else
                 header("Location: /vscar/admin/users?userId=$userId");
+        }
+    }
+
+    public function updateUserProfileImage($userId)
+    {
+        $userModel = new UserModel();
+        try {
+            $userModel->updateUserProfileImage($userId);
+            header("Location: /vscar/userProfile?userId=$userId");
+            exit;
+        } catch (\Throwable $th) {
+            // start session if it's not already started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['updateUserImage_error'] = $th->getMessage();
+            header("Location: /vscar/userProfile?userId=$userId");
         }
     }
 

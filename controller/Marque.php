@@ -32,10 +32,18 @@ class MarqueController
 
 
 
-    public function addMarque($marqueName)
+    public function addMarque($Nom, $Pays, $Année_de_création, $Siège_social)
     {
         $marqueModel = new MarqueModel();
-        return $marqueModel->addMarque($marqueName);
+        try {
+            $marqueModel->addMarque($Nom, $Pays, $Année_de_création, $Siège_social);
+            header("Location: /vscar/admin/vehicules");
+            exit;
+        } catch (\Throwable $th) {
+            $_SESSION['createBrand_error'] = $th->getMessage();
+            echo $th->getMessage();
+            header("Location: /vscar/admin/vehicules");
+        }
     }
 
     public function getModelsOfMarque($marqueID)
@@ -67,9 +75,13 @@ class MarqueController
         $marqueModel = new MarqueModel();
         try {
             $marqueModel->updateMarque($ID_Marque, $Nom, $Pays, $Année_de_création, $Siège_social);
-            header("Location: /vscar/admin/vehicules");
+            header("Location: /vscar/admin/brands?brandId=$ID_Marque");
             exit;
         } catch (\Throwable $th) {
+            //start session if not started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
             $_SESSION['updateBrand_error'] = $th->getMessage();
             echo $th->getMessage();
             // header("Location: /vscar/admin/brands?brandId=$ID_Marque");

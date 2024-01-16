@@ -453,9 +453,71 @@ function displayCurrentImageNews(input) {
   }
 }
 
+function deleteContact(id) {
+  $.ajax({
+    url: "/vscar/api/contact/deleteContact.php",
+    method: "POST",
+    data: { id: id },
+    success: function (result) {
+      console.log(result);
+      location.reload();
+    },
+    error: function (error) {
+      location.reload();
+    },
+  });
+}
+
 function activateUser(id) {
   $.ajax({
     url: "/vscar/api/user/activateUser.php",
+    method: "POST",
+    data: { id: id },
+    success: function (result) {
+      console.log(result);
+      location.reload();
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+}
+
+function deleteBrand(id) {
+  $.ajax({
+    url: "/vscar/api/brand/deleteBrand.php",
+    method: "POST",
+    data: { id: id },
+    success: function (result) {
+      console.log(result);
+      location.reload();
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+}
+
+function ToggleHomeNews(id) {
+  $.ajax({
+    url: "/vscar/api/news/toggleHomeNews.php",
+    method: "POST",
+    data: { id: id },
+    success: function (result) {
+      console.log(result);
+      location.reload();
+    },
+    error: function (error) {
+      console.log(error);
+      location.reload();
+    },
+  });
+}
+
+function deleteVehicule(id) {
+  console.log(id);
+  $.ajax({
+    url: "/vscar/api/vehicule/deleteVehicule.php",
     method: "POST",
     data: { id: id },
     success: function (result) {
@@ -529,7 +591,7 @@ function unlikeVehiculeReview(reviewId) {
   });
 }
 
-function unlikeVehicule(vehiculeId){
+function unlikeVehicule(vehiculeId) {
   $.ajax({
     url: "/vscar/api/vehicule/unlikeVehicule.php",
     method: "POST",
@@ -544,7 +606,7 @@ function unlikeVehicule(vehiculeId){
   });
 }
 
-function likeBrand(brandId){
+function likeBrand(brandId) {
   $.ajax({
     url: "/vscar/api/brand/likeBrand.php",
     method: "POST",
@@ -559,7 +621,7 @@ function likeBrand(brandId){
   });
 }
 
-function unlikeBrand(brandId){
+function unlikeBrand(brandId) {
   $.ajax({
     url: "/vscar/api/brand/unlikeBrand.php",
     method: "POST",
@@ -574,7 +636,7 @@ function unlikeBrand(brandId){
   });
 }
 
-function likeVehicule(vehiculeId){
+function likeVehicule(vehiculeId) {
   $.ajax({
     url: "/vscar/api/vehicule/likeVehicule.php",
     method: "POST",

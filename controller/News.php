@@ -49,6 +49,18 @@ class NewsController
         return $newsModel->getNewsToShowInHome();
     }
 
+    public function toggleNews($id)
+    {
+        $newsModel = new NewsModel();
+        try {
+            $newsModel->toggleNews($id);
+            header('Location: /vscar/admin/settings');
+            return true;
+        } catch (\Throwable $th) {
+            header('Location: /vscar/admin/settings');
+        }
+    }
+
     public function getNewsByID($id)
     {
         $newsModel = new NewsModel();

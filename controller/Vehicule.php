@@ -22,10 +22,13 @@ class VehiculeController
         try {
             $vehiculeModel->updateVehicule($ID_Vehicule, $Prix, $type_carburant, $puissance, $acceleration, $conso_carburant, $longueur, $largeur, $hauteur, $nb_places, $volume_coffre, $moteur, $Nom);
             header("Location: /vscar/admin/vehicules");
-            exit;
         } catch (\Throwable $th) {
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
             $_SESSION['updateVehicule_error'] = $th->getMessage();
-            header("Location: /vscar/admin/vehicules?vehiculeId=$ID_Vehicule");
+            echo $th->getMessage();
+            header("Location: /vscar/admin/vehicules");
         }
     }
 
@@ -35,11 +38,7 @@ class VehiculeController
         return $vehiculeModel->getOneVehiculeIDByBrandAndModelAndVersionAndYear($brand, $model, $version, $year);
     }
 
-    public function updateVehiculePhoto($photo, $vehiculeID)
-    {
-        $vehiculeModel = new VehiculeModel();
-        return $vehiculeModel->updateVehiculePhoto($photo, $vehiculeID);
-    }
+
 
     public function getAllVehicules()
     {
@@ -52,11 +51,14 @@ class VehiculeController
         $vehiculeModel = new VehiculeModel();
         try {
             $vehiculeModel->addVehicule($ID_Marque, $Modele, $Version, $Annee, $Prix, $type_carburant, $puissance, $acceleration, $conso_carburant, $longueur, $largeur, $hauteur, $nb_places, $volume_coffre, $moteur, $Nom);
-            header("Location: /vscar/admin/vehicules");
+            header("Location: /vscar/admin/brands?brandId=$ID_Marque");
             exit;
         } catch (\Throwable $th) {
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
             $_SESSION['addVehicule_error'] = $th->getMessage();
-            header("Location: /vscar/admin/vehicules");
+            header("Location: /vscar/admin/brands?brandId=$ID_Marque");
         }
     }
 
@@ -96,12 +98,14 @@ class VehiculeController
         return $vehiculeModel->unlikeVehiculeByUser($userId, $vehiculeId);
 
     }
-    public function IsVehiculeLikedByUser($userId, $vehiculeId){
+    public function IsVehiculeLikedByUser($userId, $vehiculeId)
+    {
         $vehiculeModel = new VehiculeModel();
         return $vehiculeModel->IsVehiculeLikedByUser($userId, $vehiculeId);
     }
 
-    public function getVehiculesLikedByUser($userId){
+    public function getVehiculesLikedByUser($userId)
+    {
         $vehiculeModel = new VehiculeModel();
         return $vehiculeModel->getVehiculesLikedByUser($userId);
     }

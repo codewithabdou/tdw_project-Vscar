@@ -12,7 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_COOKIE['userId'])) {
         header("Location: /vscar/vehicule?vehiculeId=" . $vehiculeId . "");
     }
     $reviewController->addVehiculeReview($vehiculeId, $userId, $rating, $comment);
-    header("Location: /vscar/vehicule?vehiculeId=" . $vehiculeId . "");
+    // check from where the request came from
+    $referer = $_SERVER['HTTP_REFERER'] ?? null;
+    if ($referer != null) {
+        if (strpos($referer, "Reviews") !== false) {
+            header("Location: /vscar/vehiculeReviews?vehiculeId=" . $vehiculeId . "");
+        } else {
+            header("Location: /vscar/vehicule?vehiculeId=" . $vehiculeId . "");
+        }
+    }
+
 } else {
     header("Location: /vscar/");
 }

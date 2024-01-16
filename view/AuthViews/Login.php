@@ -1,10 +1,16 @@
 <?php
 
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/Home.php");
+
 class LoginView
 {
     public function displayLoginPage()
     {
+        $home = new UserHomePage();
+        $home->displayHeader();
+        $home->displayMenu();
         $this->displayForm();
+        $home->displayFooter();
 
     }
     public function displayForm()
@@ -20,7 +26,7 @@ class LoginView
             $formData = array();
         }
         ?>
-        <div class="d-flex  align-items-center justify-content-center" style="height: 100vh;">
+        <div class="d-flex  align-items-center justify-content-center" style="min-height : 70vh;">
             <form class="container bg-light p-4 rounded" action="/vscar/api/auth/login.php" method="POST">
                 <div class="mb-3">
                     <label class="form-label" for="username">Username</label>

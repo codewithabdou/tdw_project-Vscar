@@ -17,6 +17,30 @@ class NewsModel
         return $result;
     }
 
+    public function toggleNews($id)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        $stmt = $conn->prepare("SELECT * FROM news WHERE ID_News = :id");
+        $stmt->bindParam(':id', $id);
+        try {
+            $stmt->execute();
+            $result = $stmt->fetch();
+            if ($result['ShowInHome'] == 1) {
+                $stmt = $conn->prepare("UPDATE news SET ShowInHome = 0 WHERE ID_News = :id");
+            } else {
+                $stmt = $conn->prepare("UPDATE news SET ShowInHome = 1 WHERE ID_News = :id");
+            }
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return true;
+        } catch (\Throwable $th) {
+            throw new ErrorException($stmt->queryString);
+        } finally {
+            $dbController->disconnect($conn);
+        }
+    }
+
     public function addNews($title, $text, $link)
     {
         if (!isset($_FILES['Image']) || $_FILES['Image']['error'] == UPLOAD_ERR_NO_FILE) {
@@ -63,7 +87,8 @@ class NewsModel
         }
     }
 
-    public function getNewsToShowInHome(){
+    public function getNewsToShowInHome()
+    {
         $dbController = new DataBaseController();
         $conn = $dbController->connect();
         $stmt = $conn->prepare("SELECT * FROM news WHERE ShowInHome = 1");
@@ -87,30 +112,50 @@ class NewsModel
 
     public function updateNews($id, $title, $text, $link)
     {
-        $dbController = new DataBaseController();
-        $imagesTraitement = new ImagesTraitement();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("UPDATE news SET Titre = :title, Texte = :text, lien = :link ,Image = :image WHERE ID_News = :id");
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':text', $text);
-        $stmt->bindParam(':link', $link);
-        $stmt->bindParam(':image', $_FILES['Image']['name']);
+        if (isset($_FILES['Image']) && $_FILES['Image']['error'] == UPLOAD_ERR_OK) {
+            $dbController = new DataBaseController();
+            $imagesTraitement = new ImagesTraitement();
+            $conn = $dbController->connect();
+            $stmt = $conn->prepare("UPDATE news SET Titre = :title, Texte = :text, lien = :link ,Image = :image WHERE ID_News = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':text', $text);
+            $stmt->bindParam(':link', $link);
+            $stmt->bindParam(':image', $_FILES['Image']['name']);
 
-        try {
-            $stmt->execute();
-            if (isset($_FILES['Image']) && $_FILES['Image']['error'] == UPLOAD_ERR_OK) {
+            try {
+                $stmt->execute();
                 try {
                     $imagesTraitement->uploadImage('Image', '/public/images/news/');
                 } catch (\Throwable $th) {
                     throw new ErrorException($th->getMessage());
                 }
+                return true;
+            } catch (\Throwable $th) {
+                throw new ErrorException($th->getMessage());
+            } finally {
+                $dbController->disconnect($conn);
             }
-            return true;
-        } catch (\Throwable $th) {
-            throw new ErrorException($th->getMessage());
-        } finally {
-            $dbController->disconnect($conn);
+        } else {
+            $dbController = new DataBaseController();
+            $imagesTraitement = new ImagesTraitement();
+            $conn = $dbController->connect();
+            $stmt = $conn->prepare("UPDATE news SET Titre = :title, Texte = :text, lien = :link  WHERE ID_News = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':text', $text);
+            $stmt->bindParam(':link', $link);
+
+            try {
+                $stmt->execute();
+
+                return true;
+            } catch (\Throwable $th) {
+                throw new ErrorException($th->getMessage());
+            } finally {
+                $dbController->disconnect($conn);
+            }
+
         }
     }
 

@@ -5,42 +5,11 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/controller/User.php");
 class AdminHomePage
 {
 
-
-
     public function displayAdminDashboard()
     {
         $this->displayAdminSideBar();
         $this->displayAdminDashboardContent();
     }
-
-
-
-
-
-
-    public function displayAdminSettings()
-    {
-        $this->displayAdminSideBar();
-        $this->displayAdminSettingsContent();
-    }
-
-
-
-
-
-
-
-
-    public function displayAdminSettingsContent()
-    {
-
-    }
-
-
-
-
-
-
 
     public function SignOut()
     {
@@ -56,7 +25,7 @@ class AdminHomePage
     {
         ?>
         <header class="header" id="header">
-            <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+            <a class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </a>
             <div class=""> <img style="height: 20px;" src="/vscar/public/images/logos/logo-black.png" alt=""> </div>
         </header>
         <div class="l-navbar" id="nav-bar">
@@ -89,7 +58,8 @@ class AdminHomePage
                                 <i class='bx bx-cog nav_icon'></i> <span class="nav_name">Settings</span>
                             </a>
                         </div>
-                    </div> <a href="/vscar/admin/signout" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span
+                    </div>
+                    <a href="#" onclick="logout()" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span
                             class="nav_name">Sign
                             out</span> </a>
                 </nav>
