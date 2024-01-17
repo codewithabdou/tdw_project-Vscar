@@ -1,6 +1,5 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    // Start the session if it's not already started
     session_start();
 }
 require_once($_SERVER["DOCUMENT_ROOT"] . "/vscar/model/User.php");
@@ -104,7 +103,6 @@ class UserController
             header("Location: /vscar/userProfile?userId=$userId");
             exit;
         } catch (\Throwable $th) {
-            // start session if it's not already started
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }

@@ -27,22 +27,18 @@ class BrandReviewsView
         $brandVehicules = $vehiculeController->getVehiculeByMarqueID($id);
         $reviewController = new ReviewController();
         $reviews = $reviewController->getReviewsOfBrand($id);
-        // Assuming $reviews is an array of reviews
         $reviewsPerPage = 5;
         $totalPages = ceil(count($reviews) / $reviewsPerPage);
 
         $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 
 
-        // Validate the page number
         if ($page < 1 || $page > $totalPages) {
             $page = 1;
         }
 
-        // Use array_chunk to split reviews into chunks
         $reviewChunks = array_chunk($reviews, $reviewsPerPage);
 
-        // Get the reviews for the current page
         if (isset($reviewChunks[$page - 1]))
             $currentPageReviews = $reviewChunks[$page - 1];
         else
@@ -235,7 +231,6 @@ class BrandReviewsView
                             <?php
                         }
                         if (!empty($currentPageReviews)) {
-                            // Display pagination links
                             echo '<ul class="pagination justify-content-end">';
                             echo '<li class="page-item ' . (($page == 1) ? 'disabled' : '') . '">';
                             echo '<a class="page-link" href="/vscar/brandReviews?brandId=' . $id . '&page=' . ($page - 1) . '" tabindex="-1" aria-disabled="true">Previous</a>';

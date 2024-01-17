@@ -48,17 +48,8 @@ class ReviewsManagement
         $userController = new UserController();
 
         $vehiculesReviews = $reviewscontroller->getVehiculesReviews();
-        $reviewsPerPage = 5;
-        $totalVehicules = count($vehiculesReviews);
-        $totalPages = ceil($totalVehicules / $reviewsPerPage);
 
-        $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-
-        $offset = ($currentPage - 1) * $reviewsPerPage;
-
-        $reviewsToShow = array_slice($vehiculesReviews, $offset, $reviewsPerPage);
-
-        $statusFilter = isset($_GET['status']) ? $_GET['status'] : ''; // Get the selected status filter
+        $statusFilter = isset($_GET['status']) ? $_GET['status'] : ''; 
 
         ?>
 
@@ -91,7 +82,6 @@ class ReviewsManagement
                 <tbody>
                     <?php
                     foreach ($vehiculesReviews as $review) {
-                        // Apply status filter
                         if ($statusFilter == '' || $review["Statut"] == $statusFilter) {
                             ?>
                             <tr>
@@ -154,17 +144,9 @@ class ReviewsManagement
         $userController = new UserController();
 
         $brandsReviews = $reviewscontroller->getBrandsReviews();
-        $reviewsPerPage = 5;
-        $totalBrands = count($brandsReviews);
-        $totalPages = ceil($totalBrands / $reviewsPerPage);
 
-        $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 
-        $offset = ($currentPage - 1) * $reviewsPerPage;
-
-        $reviewsToShow = array_slice($brandsReviews, $offset, $reviewsPerPage);
-
-        $statusFilter = isset($_GET['status']) ? $_GET['status'] : ''; // Get the selected status filter
+        $statusFilter = isset($_GET['status']) ? $_GET['status'] : ''; 
 
         ?>
 

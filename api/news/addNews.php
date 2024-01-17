@@ -7,16 +7,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_FILES['Image']) && $_FILES['Image']['error'] == UPLOAD_ERR_OK) {
         $title = $_POST['Titre'];
         $text = $_POST['Texte'];
-        $link = $_POST['Lien'];
+        $link = 'link';
 
-        // Access the file details
         $imageFileName = $_FILES['Image']['name'];
         $imageTempName = $_FILES['Image']['tmp_name'];
 
         echo $imageFileName;
         echo $imageTempName;
 
-        // Proceed with the file handling and news addition
         $newsController->addNews($title, $text, $link);
     } else {
         if (session_status() == PHP_SESSION_NONE) {

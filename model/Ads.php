@@ -121,6 +121,23 @@ class AdsModel
         }
     }
 
+    public function getAd($id)
+    {
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        $stmt = $conn->prepare("SELECT * FROM ads WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+        try {
+            $stmt->execute();
+            $result = $stmt->fetch();
+            return $result;
+        } catch (\Throwable $th) {
+            throw new ErrorException($stmt->queryString);
+        } finally {
+            $dbController->disconnect($conn);
+        }
+    }
+
     public function toggleShowAd($id)
     {
         $dbController = new DataBaseController();
@@ -138,6 +155,21 @@ class AdsModel
             $stmt->bindParam(':id', $id);
             $stmt->execute();
             return true;
+        } catch (\Throwable $th) {
+            throw new ErrorException($stmt->queryString);
+        } finally {
+            $dbController->disconnect($conn);
+        }
+    }
+
+    public function getAdsToShowInHome(){
+        $dbController = new DataBaseController();
+        $conn = $dbController->connect();
+        $stmt = $conn->prepare("SELECT * FROM ads WHERE show_in_home = 1");
+        try {
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
         } catch (\Throwable $th) {
             throw new ErrorException($stmt->queryString);
         } finally {

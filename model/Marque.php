@@ -1,6 +1,5 @@
 <?php
 
-//Marque model class
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/DataBase.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/utils/images.php");
@@ -157,7 +156,6 @@ class MarqueModel
         $result = $stmt->fetchAll();
         $models = [];
         foreach ($result as $row) {
-            //check if model already exists
             if (in_array($row["Modèle"], $models)) {
                 continue;
             }
@@ -167,17 +165,18 @@ class MarqueModel
         return $models;
     }
 
-    public function getYearsofVersion($version)
+    public function getYearsofVersion($version, $model, $brandId)
     {
         $dbController = new DataBaseController();
         $conn = $dbController->connect();
-        $stmt = $conn->prepare("SELECT * FROM `véhicules` WHERE `Version` = :version");
+        $stmt = $conn->prepare("SELECT * FROM `véhicules` WHERE `Version` = :version AND `Modèle` = :model AND `ID_Marque` = :brandId");
         $stmt->bindParam(':version', $version);
+        $stmt->bindParam(':model', $model);
+        $stmt->bindParam(':brandId', $brandId);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $years = [];
         foreach ($result as $row) {
-            //check if year already exists
             if (in_array($row["Année"], $years)) {
                 continue;
             }
@@ -187,17 +186,17 @@ class MarqueModel
         return $years;
     }
 
-    public function getVersionsofModel($model)
+    public function getVersionsofModel($model, $brandId)
     {
         $dbController = new DataBaseController();
         $conn = $dbController->connect();
-        $stmt = $conn->prepare("SELECT * FROM `véhicules` WHERE `Modèle` = :model");
+        $stmt = $conn->prepare("SELECT * FROM `véhicules` WHERE `Modèle` = :model AND `ID_Marque` = :brandId");
         $stmt->bindParam(':model', $model);
+        $stmt->bindParam(':brandId', $brandId);
         $stmt->execute();
         $result = $stmt->fetchAll();
         $versions = [];
         foreach ($result as $row) {
-            //check if version already exists
             if (in_array($row["Version"], $versions)) {
                 continue;
             }

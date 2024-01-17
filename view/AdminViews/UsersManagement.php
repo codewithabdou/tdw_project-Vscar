@@ -2,6 +2,7 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/Home.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/controller/User.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/UserViews/UserProfileView.php");
 
 
 class UsersManagement
@@ -18,15 +19,7 @@ class UsersManagement
         $userController = new UserController();
 
         $users = $userController->getAllUsers();
-        $usersPerPage = 5;
-        $totalUsers = count($users);
-        $totalPages = ceil($totalUsers / $usersPerPage);
 
-        $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-
-        $offset = ($currentPage - 1) * $usersPerPage;
-
-        $usersToShow = array_slice($users, $offset, $usersPerPage);
 
         ?>
 
@@ -108,6 +101,8 @@ class UsersManagement
         $adminHome = new AdminHomePage();
         $adminHome->displayAdminSideBar();
         $this->displayAdminUserContent($userId);
+        $userHome = new UserProfileView();
+        $userHome->displayUserLikedItems($userId);
     }
 
     public function displayAdminUserContent($userId)
@@ -117,7 +112,6 @@ class UsersManagement
 
 
         if (session_status() == PHP_SESSION_NONE) {
-            // Start the session if it's not already started
             session_start();
         }
         if (isset($_SESSION['updateUser_form_data'])) {
@@ -127,8 +121,12 @@ class UsersManagement
             $formData = array();
         }
         ?>
+        <h3>Update
+            <?php echo $userData['Nom']; ?> profile
+        </h3>
         <div class="d-flex align-items-center justify-content-center">
-            <form class="container bg-light p-4 rounded" action="/vscar/api/user/updateUser.php" method="POST">
+            <form enctype="multipart/form-data" class="container bg-light p-4 rounded" action="/vscar/api/user/updateUser.php"
+                method="POST">
                 <input hidden value="<?php echo $userData['ID_Utilisateur']; ?>" name="userId">
                 <div class="row mb-3">
                     <div class="col-md-6">
@@ -156,10 +154,19 @@ class UsersManagement
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label" for="Date_de_naissance">Birthday</label>
                         <input value="<?php echo $userData['Date_de_naissance']; ?>" class="form-control" type="date"
                             name="Date_de_naissance">
+                    </div>
+                    <div class="col-md-6" style="margin-top: 1.95rem; ">
+                        <label class="custom-file-label" for="ImageUser">Image</label>
+                        <input class="custom-file-input" type="file" id="ImageUser" name="ImageUser"
+                            onchange="displayCurrentImageNews(this)">
+                        <p id="currentImageDisplayNews">Current Image:
+                            <img src=<?= '/vscar/public/images/users/' . $userData["Photo"] ?> style="padding: 5px;" width="40"
+                                height="40" />
+                        </p>
                     </div>
                 </div>
                 <?php

@@ -16,7 +16,6 @@ class SignUpView
     public function displayForm()
     {
         if (session_status() == PHP_SESSION_NONE) {
-            // Start the session if it's not already started
             session_start();
         }
         if (isset($_SESSION['signup_form_data'])) {

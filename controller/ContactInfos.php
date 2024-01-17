@@ -18,7 +18,6 @@ class ContactInfosController
             $contactInfosModel->updateContactInfos($adresse, $email, $numero);
             header("Location: /vscar/admin/settings");
         } catch (\Throwable $th) {
-            //start session if not already started
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }

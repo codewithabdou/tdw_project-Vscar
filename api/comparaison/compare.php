@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result24 = null;
     $result34 = null;
 
-    //if there is 4 cars check all possible combinations using $annee1, $annee2, $annee3, $annee4
 
     if (isset($annee1) && isset($annee2) && isset($annee3) && isset($annee4)) {
         $id1 = $vehiculeController->getOneVehiculeIDByBrandAndModelAndVersionAndYear($marque1, $modele1, $version1, $annee1);
@@ -48,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     }
 
-    //if there is at least 3 cars check all possible combinations using $annee1, $annee2, $annee3, $annee4
 
     if (isset($annee1) && isset($annee2) && isset($annee3)) {
         $id1 = $vehiculeController->getOneVehiculeIDByBrandAndModelAndVersionAndYear($marque1, $modele1, $version1, $annee1);
@@ -77,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id4 = $vehiculeController->getOneVehiculeIDByBrandAndModelAndVersionAndYear($marque4, $modele4, $version4, $annee4);
         $result234 = $comparaisonController->threeCarsComparaison($id2, $id3, $id4);
     }
-    //if there is at least 2 cars check all possible combinations using $annee1, $annee2, $annee3, $annee4
     if (isset($annee1) && isset($annee2)) {
         $id1 = $vehiculeController->getOneVehiculeIDByBrandAndModelAndVersionAndYear($marque1, $modele1, $version1, $annee1);
         $id2 = $vehiculeController->getOneVehiculeIDByBrandAndModelAndVersionAndYear($marque2, $modele2, $version2, $annee2);
@@ -185,7 +182,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 $id2 = $result34[1]['ID_Véhicule'];
                                                 header("Location: /vscar/comparator?id1=$id1&id2=$id2");
                                             } else {
-                                                //start session if not already started
                                                 if (session_status() == PHP_SESSION_NONE) {
                                                     session_start();
                                                 }
@@ -194,4 +190,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             }
 
 }
-?>

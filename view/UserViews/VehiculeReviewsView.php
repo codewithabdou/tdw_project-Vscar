@@ -28,22 +28,18 @@ class VehiculeReiewsView
         $vehicule = $vehiculeController->getVehiculeByID($id);
         $reviewController = new ReviewController();
         $reviews = $reviewController->getReviewsOfVehicule($id);
-        // Assuming $reviews is an array of reviews
         $reviewsPerPage = 5;
         $totalPages = ceil(count($reviews) / $reviewsPerPage);
 
         $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 
 
-        // Validate the page number
         if ($page < 1 || $page > $totalPages) {
             $page = 1;
         }
 
-        // Use array_chunk to split reviews into chunks
         $reviewChunks = array_chunk($reviews, $reviewsPerPage);
 
-        // Get the reviews for the current page
         $currentPageReviews = $reviewChunks[$page - 1];
 
         ?>
@@ -226,7 +222,6 @@ class VehiculeReiewsView
                             <?php
                         }
 
-                        // Display pagination links
                         echo '<ul class="pagination justify-content-end">';
                         echo '<li class="page-item ' . (($page == 1) ? 'disabled' : '') . '">';
                         echo '<a class="page-link" href="/vscar/vehiculeReviews?vehiculeId=' . $id . '&page=' . ($page - 1) . '" tabindex="-1" aria-disabled="true">Previous</a>';

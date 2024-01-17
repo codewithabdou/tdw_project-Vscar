@@ -13,6 +13,7 @@ class ContactView
         $home->displayHeader();
         $home->displayMenu();
         $this->displayContactForm();
+        $home->displayFooter();
     }
     public function displayContactForm()
     {

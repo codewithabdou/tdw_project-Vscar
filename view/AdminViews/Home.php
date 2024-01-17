@@ -14,7 +14,6 @@ class AdminHomePage
     public function SignOut()
     {
         if (session_status() == PHP_SESSION_NONE) {
-            // Start the session if it's not already started
             session_start();
         }
         session_destroy();

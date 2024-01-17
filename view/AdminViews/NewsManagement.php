@@ -19,18 +19,15 @@ class NewsManagement
             <form enctype="multipart/form-data" class="container bg-light p-4 rounded" action="/vscar/api/news/addNews.php"
                 method="POST">
                 <div class="row mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label class="form-label" for="Titre">Title</label>
                         <input class="form-control" type="text" name="Titre" required>
                     </div>
-                    <div class="col-md-4" style="margin-top: 1.95rem; ">
+                    <div class="col-md-6" style="margin-top: 1.95rem; ">
                         <label class="custom-file-label" for="Image"> Image</label>
                         <input class="custom-file-input" type="file" id="Image" name="Image" required>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label" for="Lien">External link</label>
-                        <input value="" class="form-control" type="text" name="Lien" required>
-                    </div>
+
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-12">
@@ -67,17 +64,16 @@ class NewsManagement
         $home = new AdminHomePage();
         $home->displayAdminSideBar();
 
-        // Include your update form
         ?>
         <div class="d-flex align-items-center justify-content-center">
             <form enctype="multipart/form-data" class="container bg-light p-4 rounded" action="/vscar/api/news/updateNews.php"
                 method="POST">
                 <div class="row mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label class="form-label" for="Titre">Title</label>
                         <input class="form-control" type="text" name="Titre" value="<?= $existingNews['Titre'] ?>" required>
                     </div>
-                    <div class="col-md-4" style="margin-top: 1.95rem;">
+                    <div class="col-md-6" style="margin-top: 1.95rem;">
                         <label class="custom-file-label" for="Image">Image</label>
                         <input class="custom-file-input" type="file" id="Image" name="Image"
                             onchange="displayCurrentImageNews(this)">
@@ -86,10 +82,7 @@ class NewsManagement
                                 width="40" height="40" />
                         </p>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label" for="lien">External link</label>
-                        <input value="<?= $existingNews['lien'] ?>" class="form-control" type="text" name="lien" required>
-                    </div>
+
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-12">
@@ -119,15 +112,7 @@ class NewsManagement
         $newsController = new NewsController();
 
         $news = $newsController->getAllNews();
-        $newsPerPage = 5;
-        $totalNews = count($news);
-        $totalPages = ceil($totalNews / $newsPerPage);
 
-        $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-
-        $offset = ($currentPage - 1) * $newsPerPage;
-
-        $newsToShow = array_slice($news, $offset, $newsPerPage);
 
 
         ?>
@@ -148,7 +133,6 @@ class NewsManagement
                         <th data-sortable="true" data-field="ID">ID</th>
                         <th data-sortable="true" data-field="Title">Title</th>
                         <th data-sortable="true" data-field="Text">Text</th>
-                        <th data-sortable="true" data-field="External link">External link</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -164,10 +148,7 @@ class NewsManagement
                                 <?= $singleNews["Titre"]; ?>
                             </td>
                             <td>
-                                <?= $singleNews["Texte"]; ?>
-                            </td>
-                            <td>
-                                <?= $singleNews["lien"]; ?>
+                                <?= substr($singleNews["Texte"], 0, 200); ?> ...
                             </td>
                             <td class="d-flex pl-3  " style="border: none;">
                                 <a href="/vscar/admin/news?newsId=<?= $singleNews["ID_News"]; ?>"

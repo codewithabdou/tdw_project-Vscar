@@ -36,11 +36,14 @@ class UserProfileView
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <img src='/vscar/public/images/users/<?= $user["Photo"]; ?>' class="img-fluid" alt="User Image">
+                    <div class="col-md-6 flex-column flex-centered">
+
+                        <img src='/vscar/public/images/users/<?= $user["Photo"]; ?>'
+                            style="aspect-ratio: 1; max-height: 30rem; border-radius: 50%; border: 1px solid black;"
+                            class="img-fluid" alt="User Image">
                         <form enctype="multipart/form-data" method="POST" action="/vscar/api/user/updateProfileImage.php">
 
-                            <div class="col-md-4" style="margin-top: 1.95rem;">
+                            <div class="col-12" style="margin-top: 1.95rem; ">
                                 <label class="custom-file-label" for="ImageUser">Image</label>
                                 <input class="custom-file-input" type="file" id="ImageUser" required name="ImageUser"
                                     onchange="displayCurrentImageNews(this)">
@@ -171,7 +174,7 @@ class UserProfileView
                     echo '</div>';
                 }
                 foreach ($vehicules as $vehicule) {
-                    echo '<a href="/vscar/vehicule?vehiculeId=' . $vehicule['ID_Véhicule'] . '" class="col-4 jumbotron rounded border d-flex flex-column justify-content-center align-items-center">';
+                    echo '<a href="/vscar/vehicule?vehiculeId=' . $vehicule['ID_Véhicule'] . '" class="col-4 p-4 m-2 jumbotron rounded border d-flex flex-column justify-content-center align-items-center">';
                     echo '<img src="/vscar/public/images/vehicules/' . $vehicule['Photo'] . '" alt="' . $vehicule['Nom'] . '" class="img-fluid" style="width : 80%;">';
                     echo '<p style="font-weight : 900; font-size : 2rem;" class="text-center">' . $vehicule['Nom'] . '</p>';
 
@@ -203,7 +206,8 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20"
+                                            class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php
@@ -301,7 +305,8 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20"
+                                            class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php
@@ -410,7 +415,8 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20"
+                                            class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php
@@ -508,7 +514,8 @@ class UserProfileView
                             <div class="card-body">
                                 <div class=" d-flex justify-content-between align-items-center p-1">
                                     <p style="font-weight: 900;">
-                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20" class="rounded-circle"
+                                        <img style="border: 1px solid black;" height="20" width="20" height="20" width="20"
+                                            class="rounded-circle"
                                             src="/vscar/public/images/users/<?= $userController->getUserByID($review['ID_Utilisateur'])['Photo']; ?>" />
 
                                         <?php

@@ -33,6 +33,7 @@ $userId = $_GET['userId'] ?? null;
 $vehiculeId = $_GET['vehiculeId'] ?? null;
 $brandId = $_GET['brandId'] ?? null;
 $newsId = $_GET['newsId'] ?? null;
+$adId = $_GET['adId'] ?? null;
 
 
 $loginView = new LoginView();
@@ -188,6 +189,18 @@ switch ($request) {
         if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
 
             $adminSettingsManagement->displaySettingsManagementPage();
+        } else {
+            $notFoundPage->displayNotFoundPage();
+
+        }
+        break;
+    case "/vscar/admin/ads":
+        if (isset($_COOKIE['userId']) && $_COOKIE['userType'] === "Admin") {
+
+            if ($adId)
+                $adminSettingsManagement->updateAdForm($adId);
+            else
+                $adminSettingsManagement->displaySettingsManagementPage();
         } else {
             $notFoundPage->displayNotFoundPage();
 

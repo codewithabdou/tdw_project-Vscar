@@ -1,6 +1,7 @@
 <?php
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/News.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/Ads.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/Marque.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/Comparaison.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/Vehicule.php';
@@ -42,7 +43,7 @@ class UserHomePage
             <nav class="navbar  navbar-expand-lg navbar-light bg-light">
                 <div class="collapse d-flex justify-content-center navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav w-100 d-flex justify-content-around">
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" href="/vscar/"><i class='bx bx-home'></i> Home</a>
                         </li>
                         <li class="nav-item">
@@ -523,7 +524,6 @@ class UserHomePage
                     echo '<a href="#" onclick="logout()" class="btn btn-outline-primary">Logout</a>';
                     echo '<a href="/vscar/userProfile?userId=' . $_COOKIE['userId'] . '" class="btn btn-outline-secondary mx-3">Profile</a>';
                 } else {
-                    // Utilisateur non connecté
                     echo '<a href="/vscar/signup/" class="btn btn-outline-primary mx-3">Sign Up</a>';
 
                     echo '<a href="/vscar/login/" class="btn btn-outline-primary">Login</a>';
@@ -541,6 +541,9 @@ class UserHomePage
     {
         $newsController = new NewsController();
         $newsToShowInHome = $newsController->getNewsToShowInHome();
+        $adController = new AdsController();
+        $ads = $adController->getAdsToShowInHome();
+        $newsToShowInHome = array_merge($newsToShowInHome, $ads);
 
         ?>
 
@@ -569,17 +572,39 @@ class UserHomePage
                         echo '<div style="height: 90vh; " class="carousel-item">';
                     }
                     ?>
-                    <img src="/vscar/public/images/news/<?= $news['Image']; ?>" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5 class="px-5 py-2" style="font-weight: bold; background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
-                            <?= $news['Titre']; ?>
-                        </h5>
-                        <p class="px-5 py-2" style=" background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
-                            <?= $news['Texte']; ?>
-                            <span style="font-weight: bold;"><a target="_blank" href="<?= $news['lien']; ?>">read more
-                                    ...</a></span>
-                        </p>
-                    </div>
+                    <?php
+                    if (isset($news['ID_News'])) {
+                        ?>
+                        <img src="/vscar/public/images/news/<?= $news['Image']; ?>" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5 class="px-5 py-2" style="font-weight: bold; background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
+                                <?= $news['Titre']; ?>
+                            </h5>
+                            <p class="px-5 py-2" style=" background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
+                                <?= substr($news['Texte'], 0, 200); ?>
+                                <span style="font-weight: bold;"><a href="/vscar/news?newsId=<?= $news['ID_News']; ?>">read more
+                                        ...</a></span>
+                            </p>
+                        </div>
+                        <?php
+                    } else {
+                        ?>
+                        <img src="/vscar/public/images/ads/<?= $news['image']; ?>" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5 class="px-5 py-2" style="font-weight: bold; background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
+                                <?= $news['title']; ?>
+                            </h5>
+                            <p class="px-5 py-2" style=" background-color : rgba(0,0,0,0.5); border-radius : 5rem;">
+                                <?= substr($news['text'], 0, 200); ?>
+                                <span style="font-weight: bold;"><a target="_blank" href="<?= $news['external_link']; ?>">read more
+                                        ...</a></span>
+                            </p>
+                        </div>
+                        <?php
+                    }
+
+                    ?>
+
                 </div>
 
                 <?php

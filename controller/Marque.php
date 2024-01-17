@@ -1,6 +1,5 @@
 <?php
 
-// Marque Controller class
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/model/Marque.php');
 
@@ -52,16 +51,16 @@ class MarqueController
         return $marqueModel->getModelsOfMarque($marqueID);
     }
 
-    public function getVersionsOfModel($model)
+    public function getVersionsOfModel($model,$brandId)
     {
         $marqueModel = new MarqueModel();
-        return $marqueModel->getVersionsOfModel($model);
+        return $marqueModel->getVersionsOfModel($model,$brandId);
     }
 
-    public function getYearsofVersion($version)
+    public function getYearsofVersion($version,$model,$brandId)
     {
         $marqueModel = new MarqueModel();
-        return $marqueModel->getYearsofVersion($version);
+        return $marqueModel->getYearsofVersion($version,$model,$brandId);
     }
 
     public function deleteMarque($marqueID)
@@ -78,13 +77,11 @@ class MarqueController
             header("Location: /vscar/admin/brands?brandId=$ID_Marque");
             exit;
         } catch (\Throwable $th) {
-            //start session if not started
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
             $_SESSION['updateBrand_error'] = $th->getMessage();
             echo $th->getMessage();
-            // header("Location: /vscar/admin/brands?brandId=$ID_Marque");
         }
     }
 

@@ -164,31 +164,66 @@ class UserModel
             throw new ErrorException("One or more fields are empty");
         }
 
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("SELECT * FROM utilisateurs WHERE ID_utilisateur = :userId");
-        $stmt->bindParam(':userId', $userId);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $dbController->disconnect($conn);
-        if ($result === null) {
-            throw new ErrorException("User doesn't exist");
+        if (isset($_FILES['ImageUser']) && $_FILES['ImageUser']['error'] == UPLOAD_ERR_OK) {
+            $dbController = new DataBaseController();
+            $conn = $dbController->connect();
+            $stmt = $conn->prepare("SELECT * FROM utilisateurs WHERE ID_utilisateur = :userId");
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $result = $stmt->fetch();
+            $dbController->disconnect($conn);
+            if ($result === null) {
+                throw new ErrorException("User doesn't exist");
+            }
+
+            $dbController = new DataBaseController();
+            $conn = $dbController->connect();
+            $stmt = $conn->prepare("UPDATE `utilisateurs`
+            SET `Nom` = :firstname, `Prénom` = :lastname, `Sexe` = :gender, `Date_de_naissance` = :birthday
+            WHERE ID_Utilisateur = :userId
+            ");
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':birthday', $birthday);
+            $stmt->bindParam(':gender', $gender);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $dbController->disconnect($conn);
+            try {
+                $this->updateUserProfileImage($userId);
+                return true;
+            } catch (\Throwable $th) {
+                throw new ErrorException($th->getMessage());
+            }
+        } else {
+            $dbController = new DataBaseController();
+            $conn = $dbController->connect();
+            $stmt = $conn->prepare("SELECT * FROM utilisateurs WHERE ID_utilisateur = :userId");
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $result = $stmt->fetch();
+            $dbController->disconnect($conn);
+            if ($result === null) {
+                throw new ErrorException("User doesn't exist");
+            }
+
+            $dbController = new DataBaseController();
+            $conn = $dbController->connect();
+            $stmt = $conn->prepare("UPDATE `utilisateurs`
+            SET `Nom` = :firstname, `Prénom` = :lastname, `Sexe` = :gender, `Date_de_naissance` = :birthday
+            WHERE ID_Utilisateur = :userId
+            ");
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':birthday', $birthday);
+            $stmt->bindParam(':gender', $gender);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $dbController->disconnect($conn);
+            return true;
         }
 
-        $dbController = new DataBaseController();
-        $conn = $dbController->connect();
-        $stmt = $conn->prepare("UPDATE `utilisateurs`
-        SET `Nom` = :firstname, `Prénom` = :lastname, `Sexe` = :gender, `Date_de_naissance` = :birthday
-        WHERE ID_Utilisateur = :userId
-        ");
-        $stmt->bindParam(':firstname', $firstname);
-        $stmt->bindParam(':lastname', $lastname);
-        $stmt->bindParam(':birthday', $birthday);
-        $stmt->bindParam(':gender', $gender);
-        $stmt->bindParam(':userId', $userId);
-        $stmt->execute();
-        $dbController->disconnect($conn);
-        return true;
+
     }
 
 

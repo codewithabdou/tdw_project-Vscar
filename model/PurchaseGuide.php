@@ -136,7 +136,6 @@ class PurchaseGuideModel
                 $dbController->disconnect($conn);
             }
         }
-        //verifier tous les champs du guide d'achat
     }
 
 }

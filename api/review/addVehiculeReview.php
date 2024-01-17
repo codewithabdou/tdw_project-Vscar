@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_COOKIE['userId'])) {
         header("Location: /vscar/vehicule?vehiculeId=" . $vehiculeId . "");
     }
     $reviewController->addVehiculeReview($vehiculeId, $userId, $rating, $comment);
-    // check from where the request came from
     $referer = $_SERVER['HTTP_REFERER'] ?? null;
     if ($referer != null) {
         if (strpos($referer, "Reviews") !== false) {

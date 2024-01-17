@@ -1,5 +1,4 @@
 <?php
-// vehiculesmanagement class
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/Vehicule.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/controller/Marque.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . "/vscar/view/AdminViews/Home.php");
@@ -81,15 +80,8 @@ class VehiculesManagement
         $marqueController = new MarqueController();
 
         $brands = $marqueController->getAllMarques();
-        $brandsPerPage = 5;
-        $totalVehicules = count($brands);
-        $totalPages = ceil($totalVehicules / $brandsPerPage);
 
-        $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 
-        $offset = ($currentPage - 1) * $brandsPerPage;
-
-        $brandsToShow = array_slice($brands, $offset, $brandsPerPage);
 
 
         ?>
@@ -117,7 +109,7 @@ class VehiculesManagement
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($brandsToShow as $brand) {
+                    foreach ($brands as $brand) {
                         ?>
                         <tr>
                             <td>
@@ -136,9 +128,6 @@ class VehiculesManagement
                                 <?= $brand["Siège_social"]; ?>
                             </td>
                             <td class="d-flex pl-3  ">
-                                <!-- <a href="/vscar/admin/vehicules?vehiculeId="
-                                    class="btn btn-primary mr-3 ">View
-                                    details</a> -->
                                 <a href="/vscar/admin/brands?brandId=<?= $brand["ID_Marque"]; ?>" class="btn btn-warning mr-3 ">View
                                     brand
                                     details</a>
@@ -153,25 +142,7 @@ class VehiculesManagement
                     ?>
                 </tbody>
             </table>
-            <ul class="pagination justify-content-end">
-                <li class="page-item <?= ($currentPage == 1) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage - 1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <?php
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    ?>
-                    <li class="page-item <?= ($i == $currentPage) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?= $i; ?>">
-                            <?= $i; ?>
-                        </a>
-                    </li>
-                    <?php
-                }
-                ?>
-                <li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : ''; ?>">
-                    <a class="page-link" href="?page=<?= $currentPage + 1 ?>">Next</a>
-                </li>
-            </ul>
+
 
 
 
@@ -321,15 +292,7 @@ class VehiculesManagement
         $marqueController = new MarqueController();
 
         $vehicules = $vehiculeController->getVehiculeByMarqueID($brandId);
-        $vehiculesPerPage = 5;
-        $totalVehicules = count($vehicules);
-        $totalPages = ceil($totalVehicules / $vehiculesPerPage);
 
-        $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-
-        $offset = ($currentPage - 1) * $vehiculesPerPage;
-
-        $vehiculesToShow = array_slice($vehicules, $offset, $vehiculesPerPage);
 
 
         ?>
@@ -357,7 +320,7 @@ class VehiculesManagement
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($vehiculesToShow as $vehicule) {
+                        foreach ($vehicules as $vehicule) {
                             ?>
                             <tr>
                                 <td>
@@ -502,7 +465,6 @@ class VehiculesManagement
 
 
         if (session_status() == PHP_SESSION_NONE) {
-            // Start the session if it's not already started
             session_start();
         }
         if (isset($_SESSION['updateVehicule_form_data'])) {

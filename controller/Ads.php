@@ -20,6 +20,28 @@ class AdsController
         }
     }
 
+    public function toggleShowAd($id)
+    {
+        $adsModel = new AdsModel();
+        try {
+            $adsModel->toggleShowAd($id);
+            header('Location: /vscar/admin/settings');
+            return true;
+        } catch (\Throwable $th) {
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['toggleShowAd_error'] = $th->getMessage();
+            header('Location: /vscar/admin/settings');
+        }
+    }
+
+    public function getAd($id)
+    {
+        $adsModel = new AdsModel();
+        return $adsModel->getAd($id);
+    }
+
     public function deleteAd($id)
     {
         $adsModel = new AdsModel();
@@ -48,8 +70,15 @@ class AdsController
                 session_start();
             }
             $_SESSION['updateAd_error'] = $th->getMessage();
-            header('Location: /vscar/admin/settings');
+            header('Location: /vscar/admin/ads?adId' . $id);
         }
+    }
+
+    
+    public function getAdsToShowInHome()
+    {
+        $adsModel = new AdsModel();
+        return $adsModel->getAdsToShowInHome();
     }
 
     public function getAllAds()

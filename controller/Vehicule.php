@@ -1,5 +1,4 @@
 <?php
-//VehiculeController class
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vscar/model/Vehicule.php');
 
 class VehiculeController

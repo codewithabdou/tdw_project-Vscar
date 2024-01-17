@@ -14,7 +14,6 @@ class ComparaisonModel
         $dbController = new DataBaseController();
         $vehiculeController = new VehiculeController();
         $conn = $dbController->connect();
-        // verify if both cars exist
         $vehicule1 = $vehiculeController->getVehiculeById($id1);
         $vehicule2 = $vehiculeController->getVehiculeById($id2);
         if ($vehicule1 == null || $vehicule2 == null) {
@@ -22,7 +21,6 @@ class ComparaisonModel
         }
 
 
-        //verfiy if there is already with same two cars
         $stmt = $conn->prepare("SELECT * FROM comparaisons WHERE ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 IS NULL AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 IS NULL AND ID_Véhicule4 IS NULL");
         $stmt->bindParam(':id1', $id1);
         $stmt->bindParam(':id2', $id2);
@@ -50,14 +48,12 @@ class ComparaisonModel
         $dbController = new DataBaseController();
         $vehiculeController = new VehiculeController();
         $conn = $dbController->connect();
-        // verify if cars exist
         $vehicule1 = $vehiculeController->getVehiculeById($id1);
         $vehicule2 = $vehiculeController->getVehiculeById($id2);
         $vehicule3 = $vehiculeController->getVehiculeById($id3);
         if ($vehicule1 == null || $vehicule2 == null || $vehicule3 == null) {
             throw new Exception("Vehicule not found");
         }
-        //verfiy if there is already with same cars
 
         $stmt = $conn->prepare("SELECT * FROM comparaisons WHERE ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 IS NULL");
         $stmt->bindParam(':id1', $id1);
@@ -66,7 +62,6 @@ class ComparaisonModel
         $stmt->execute();
         $result = $stmt->fetch();
         if ($result) {
-            //increment the number of comparaison
             $stmt = $conn->prepare("UPDATE comparaisons SET Times = Times + 1 WHERE ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 IS NULL OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 IS NULL");
         } else {
 
@@ -90,7 +85,6 @@ class ComparaisonModel
         $dbController = new DataBaseController();
         $vehiculeController = new VehiculeController();
         $conn = $dbController->connect();
-        // verify if cars exist
         $vehicule1 = $vehiculeController->getVehiculeById($id1);
         $vehicule2 = $vehiculeController->getVehiculeById($id2);
         $vehicule3 = $vehiculeController->getVehiculeById($id3);
@@ -98,7 +92,6 @@ class ComparaisonModel
         if ($vehicule1 == null || $vehicule2 == null || $vehicule3 == null || $vehicule4 == null) {
             throw new Exception("Vehicule not found");
         }
-        //verfiy if there is already with same four cars
 
         $stmt = $conn->prepare("SELECT * FROM comparaisons WHERE ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id1 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id1 OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id1 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id1");
         $stmt->bindParam(':id1', $id1);
@@ -108,7 +101,6 @@ class ComparaisonModel
         $stmt->execute();
         $result = $stmt->fetch();
         if ($result) {
-            //increment the number of comparaison
             $stmt = $conn->prepare("UPDATE comparaisons SET Times = Times + 1 WHERE ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id1 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id4 AND ID_Véhicule4 = :id1 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id2 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id1 OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id2 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id4 OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id3 AND ID_Véhicule2 = :id4 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id1 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id3 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id1 AND ID_Véhicule3 = :id3 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id1 AND ID_Véhicule4 = :id2 OR ID_Véhicule1 = :id4 AND ID_Véhicule2 = :id3 AND ID_Véhicule3 = :id2 AND ID_Véhicule4 = :id1");
         } else {
 

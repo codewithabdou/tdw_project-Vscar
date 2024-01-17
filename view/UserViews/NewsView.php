@@ -34,7 +34,7 @@ class NewsView
                                         <?= $newsItem['Titre']; ?>
                                     </h5>
                                     <p class="card-text">
-                                        <?= $newsItem['Texte']; ?>
+                                        <?= substr($newsItem['Texte'], 0, 200); ?> ...
                                     </p>
                                     <a href="/vscar/news?newsId=<?= $newsItem['ID_News']; ?>" class="btn btn-primary">Read More</a>
                                 </div>

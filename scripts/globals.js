@@ -45,6 +45,22 @@ $(document).ready(function () {
     var fileName = $(this).val().split("\\").pop();
     $(".custom-file-label").text(fileName);
   });
+  $("#ImageUser").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(".custom-file-label").text(fileName);
+  });
+  $("#ImageAd").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(".custom-file-label").text(fileName);
+  });
+  $("#ImageCar").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(".custom-file-label").text(fileName);
+  });
+  $("#ImageBrand").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(".custom-file-label").text(fileName);
+  });
 });
 
 function updateModels1() {
@@ -184,6 +200,8 @@ function updateModels4() {
 }
 
 function updateYears1() {
+  var selectedBrand = $("#Marque1").val();
+  var selectedModel = $("#Modèle1").val();
   var selectedVersion = $("#Version1").val();
   var yearSelect = $("#Année1");
   yearSelect.empty();
@@ -196,7 +214,11 @@ function updateYears1() {
   $.ajax({
     url: "/vscar/api/brand/getVersionYear.php",
     type: "POST",
-    data: { version: selectedVersion },
+    data: {
+      version: selectedVersion,
+      model: selectedModel,
+      brandId: selectedBrand,
+    },
     success: function (data) {
       var years = JSON.parse(data);
       console.log(years);
@@ -213,6 +235,8 @@ function updateYears1() {
 }
 
 function updateYears2() {
+  var selectedBrand = $("#Marque2").val();
+  var selectedModel = $("#Modèle2").val();
   var selectedVersion = $("#Version2").val();
   var yearSelect = $("#Année2");
   yearSelect.empty();
@@ -225,7 +249,11 @@ function updateYears2() {
   $.ajax({
     url: "/vscar/api/brand/getVersionYear.php",
     type: "POST",
-    data: { version: selectedVersion },
+    data: {
+      version: selectedVersion,
+      model: selectedModel,
+      brandId: selectedBrand,
+    },
     success: function (data) {
       var years = JSON.parse(data);
       console.log(years);
@@ -242,6 +270,8 @@ function updateYears2() {
 }
 
 function updateYears3() {
+  var selectedBrand = $("#Marque3").val();
+  var selectedModel = $("#Modèle3").val();
   var selectedVersion = $("#Version3").val();
   var yearSelect = $("#Année3");
   yearSelect.empty();
@@ -254,7 +284,11 @@ function updateYears3() {
   $.ajax({
     url: "/vscar/api/brand/getVersionYear.php",
     type: "POST",
-    data: { version: selectedVersion },
+    data: {
+      version: selectedVersion,
+      model: selectedModel,
+      brandId: selectedBrand,
+    },
     success: function (data) {
       var years = JSON.parse(data);
       console.log(years);
@@ -271,6 +305,8 @@ function updateYears3() {
 }
 
 function updateYears4() {
+  var selectedBrand = $("#Marque4").val();
+  var selectedModel = $("#Modèle4").val();
   var selectedVersion = $("#Version4").val();
   var yearSelect = $("#Année4");
   yearSelect.empty();
@@ -283,7 +319,11 @@ function updateYears4() {
   $.ajax({
     url: "/vscar/api/brand/getVersionYear.php",
     type: "POST",
-    data: { version: selectedVersion },
+    data: {
+      version: selectedVersion,
+      model: selectedModel,
+      brandId: selectedBrand,
+    },
     success: function (data) {
       var years = JSON.parse(data);
       console.log(years);
@@ -300,6 +340,7 @@ function updateYears4() {
 }
 
 function updateVersions1() {
+  var selectedBrand = $("#Marque1").val();
   var selectedModel = $("#Modèle1").val();
   var versionSelect = $("#Version1");
   versionSelect.empty();
@@ -312,7 +353,7 @@ function updateVersions1() {
   $.ajax({
     url: "/vscar/api/brand/getModelVersion.php",
     type: "POST",
-    data: { model: selectedModel },
+    data: { model: selectedModel, brandId: selectedBrand },
     success: function (data) {
       var versions = JSON.parse(data);
       console.log(versions);
@@ -329,6 +370,7 @@ function updateVersions1() {
 }
 
 function updateVersions2() {
+  var selectedBrand = $("#Marque2").val();
   var selectedModel = $("#Modèle2").val();
   var versionSelect = $("#Version2");
   versionSelect.empty();
@@ -341,7 +383,7 @@ function updateVersions2() {
   $.ajax({
     url: "/vscar/api/brand/getModelVersion.php",
     type: "POST",
-    data: { model: selectedModel },
+    data: { model: selectedModel, brandId: selectedBrand },
     success: function (data) {
       var versions = JSON.parse(data);
       console.log(versions);
@@ -359,6 +401,7 @@ function updateVersions2() {
 
 function updateVersions3() {
   var selectedModel = $("#Modèle3").val();
+  var selectedBrand = $("#Marque3").val();
   var versionSelect = $("#Version3");
   versionSelect.empty();
   versionSelect.append(
@@ -370,7 +413,7 @@ function updateVersions3() {
   $.ajax({
     url: "/vscar/api/brand/getModelVersion.php",
     type: "POST",
-    data: { model: selectedModel },
+    data: { model: selectedModel, brandId: selectedBrand },
     success: function (data) {
       var versions = JSON.parse(data);
       console.log(versions);
@@ -404,6 +447,7 @@ window.onclick = function (event) {
 };
 
 function updateVersions4() {
+  var selectedBrand = $("#Marque4").val();
   var selectedModel = $("#Modèle4").val();
   var versionSelect = $("#Version4");
   versionSelect.empty();
@@ -416,7 +460,7 @@ function updateVersions4() {
   $.ajax({
     url: "/vscar/api/brand/getModelVersion.php",
     type: "POST",
-    data: { model: selectedModel },
+    data: { model: selectedModel, brandId: selectedBrand },
     success: function (data) {
       var versions = JSON.parse(data);
       console.log(versions);
@@ -460,6 +504,34 @@ function deleteContact(id) {
     data: { id: id },
     success: function (result) {
       console.log(result);
+      location.reload();
+    },
+    error: function (error) {
+      location.reload();
+    },
+  });
+}
+
+function deleteAd(id) {
+  $.ajax({
+    url: "/vscar/api/ads/deleteAd.php",
+    method: "POST",
+    data: { id: id },
+    success: function (result) {
+      location.reload();
+    },
+    error: function (error) {
+      location.reload();
+    },
+  });
+}
+
+function ToggleHomeAds(id) {
+  $.ajax({
+    url: "/vscar/api/ads/toggleHomeAds.php",
+    method: "POST",
+    data: { id: id },
+    success: function (result) {
       location.reload();
     },
     error: function (error) {
@@ -808,16 +880,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
       bodypd = document.getElementById(bodyId),
       headerpd = document.getElementById(headerId);
 
-    // Validate that all variables exist
     if (toggle && nav && bodypd && headerpd) {
       toggle.addEventListener("click", () => {
-        // show navbar
         nav.classList.toggle("show");
-        // change icon
         toggle.classList.toggle("bx-x");
-        // add padding to body
         bodypd.classList.toggle("body-pd");
-        // add padding to header
         headerpd.classList.toggle("body-pd");
       });
     }
@@ -825,7 +892,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   showNavbar("header-toggle", "nav-bar", "body-pd", "header");
 
-  /*===== LINK ACTIVE =====*/
   const linkColor = document.querySelectorAll(".nav_link");
 
   function colorLink() {
@@ -836,5 +902,4 @@ document.addEventListener("DOMContentLoaded", function (event) {
   }
   linkColor.forEach((l) => l.addEventListener("click", colorLink));
 
-  // Your code to run since DOM is loaded and ready
 });
